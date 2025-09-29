@@ -2,15 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "location":        { "value": "westeurope" },
-    "aiName":          { "value": "ais-documind-dev" },
-    "projectName":     { "value": "documind-dev" },
-    "keyVaultName":    { "value": "kv-documind-dev" },
-    "aoaiName":        { "value": "aoai-documind-dev" },
-    "visionName":      { "value": "vision-documind-dev" },
-    "searchName":      { "value": "ais-documind-dev" },
-    "searchSku":       { "value": "basic" },
-    "defenderForAI":   { "value": "Disabled" },
-    "publicNetworkAccess": { "value": "Enabled" }
+    "location": { "value": "westeurope" },
+    "storageAccountName": { "value": "stgdocumindweu01" },
+    "keyVaultName": { "value": "kv-documind-weu01" },
+    "aiName": { "value": "ais-documind-weu01" },
+    "projectName": { "value": "documind-dev" },
+    "aoaiName": { "value": "aoai-documind-weu01" },
+    "visionName": { "value": "vision-documind-weu01" },
+    "searchName": { "value": "search-documind-weu01" },
+    "searchSku": { "value": "basic" },
+    "publicNetworkAccess": { "value": "Enabled" },
+    "defenderForAI": { "value": "Disabled" }
   }
 }

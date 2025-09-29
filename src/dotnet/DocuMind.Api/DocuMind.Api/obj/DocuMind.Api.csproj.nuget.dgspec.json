@@ -1,0 +1,111 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/dinesh/documind-engineering/src/dotnet/DocuMind.Api/DocuMind.Api/DocuMind.Api.csproj": {}
+  },
+  "projects": {
+    "/home/dinesh/documind-engineering/src/dotnet/DocuMind.Api/DocuMind.Api/DocuMind.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/dinesh/documind-engineering/src/dotnet/DocuMind.Api/DocuMind.Api/DocuMind.Api.csproj",
+        "projectName": "DocuMind.Api",
+        "projectPath": "/home/dinesh/documind-engineering/src/dotnet/DocuMind.Api/DocuMind.Api/DocuMind.Api.csproj",
+        "packagesPath": "/home/dinesh/.nuget/packages/",
+        "outputPath": "/home/dinesh/documind-engineering/src/dotnet/DocuMind.Api/DocuMind.Api/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/dinesh/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Azure.AI.OpenAI": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.16.0, )"
+            },
+            "Azure.Search.Documents": {
+              "target": "Package",
+              "version": "[11.6.1, )"
+            },
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Microsoft.Extensions.Configuration.UserSecrets": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Microsoft.Extensions.Http.Polly": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "OpenAI": {
+              "target": "Package",
+              "version": "[2.5.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            },
+            "System.ClientModel": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
