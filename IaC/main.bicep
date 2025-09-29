@@ -283,7 +283,7 @@ resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   kind: 'OpenAI'
   properties: {
     customSubDomainName: aoaiName
-    publicNetworkAccess: 'Enabled'
+    publicNetworkAccess: 'enabled'
   }
   tags: { app: 'documind', service: 'openai', env: 'dev' }
 }
@@ -297,7 +297,7 @@ resource vision 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   sku: { name: 'S1' }
   kind: 'ComputerVision'
   properties: {
-    publicNetworkAccess: 'Enabled'
+    publicNetworkAccess: 'enabled'
   }
   tags: { app: 'documind', service: 'vision', env: 'dev' }
 }
@@ -313,7 +313,7 @@ resource search 'Microsoft.Search/searchServices@2023-11-01' = {
     hostingMode: 'default'
     partitionCount: 1
     replicaCount: 1
-    publicNetworkAccess: 'Enabled'
+    publicNetworkAccess: 'enabled'
   }
   tags: { app: 'documind', service: 'ai-search', env: 'dev' }
 }
