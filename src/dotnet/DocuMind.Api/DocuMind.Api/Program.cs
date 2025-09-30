@@ -30,24 +30,31 @@ app.MapGet("/healthz", () => Results.Ok(new { ok = true, ts = DateTimeOffset.Utc
 
 // Minimal /ask: local-first, fallback to AOAI if "not found"
 app.MapPost("/ask", async (
+    AskRequest req,
     AzureOpenAiService aoai,
-    OllamaClient ollama,
-    IConfiguration cfg,
-    AskRequest req) =>
+    RagClient rag, // your HTTP client to python sidecar
+    ILoggerFactory lf) =>
 {
-    string system = "You are DocuMind. Be concise.";
-    // Prompt is already built by Python RAG or we can pass plain q for now
-    var localModel = cfg["Ollama:Model"] ?? "phi3.5:3.8b-mini-instruct-q4_0";
+    var logger = lf.CreateLogger("Ask");
+    string userQ = req.Q ?? req.Prompt ?? "";
+    if (string.IsNullOrWhiteSpace(userQ)) return Results.BadRequest("Missing q/prompt");
 
-    var local = await ollama.GenerateAsync(localModel, req.Prompt ?? req.Q ?? "");
-    if (!string.IsNullOrWhiteSpace(local) && !local.Trim().Equals("not found", StringComparison.OrdinalIgnoreCase))
-        return Results.Ok(new { route = "local", answer = local });
+    // 1) RAG call
+    var ragResp = await rag.SearchAsync(userQ); // returns ranked chunks + prompt
+    // 2) Build final prompt
+    var prompt = PromptBuilder.FromRag(userQ, ragResp);
+    // 3) Azure OpenAI call
+    var answer = await aoai.ChatAsync(
+        deployment: Environment.GetEnvironmentVariable("AOAI_DEPLOYMENT")!,
+        system: "Answer strictly from context; cite sources.",
+        user: prompt);
+    return Results.Ok(new { answer });
+})
+.Accepts<AskRequest>("application/json")
+.Produces(StatusCodes.Status200OK)
+.Produces(StatusCodes.Status400BadRequest);
 
-    // Fallback to AOAI
-    var deployment = cfg["AzureOpenAI:Deployment"] ?? "gpt-4o-mini";
-    var cloud = await aoai.ChatAsync(deployment, system, req.Q ?? req.Prompt ?? "");
-    return Results.Ok(new { route = "aoai", answer = cloud });
-});
+app.MapGet("/ask", async (string q, AzureOpenAiService aoai, RagClient rag) => { /* same */ });
 
 app.Run();
 

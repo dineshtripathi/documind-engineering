@@ -1,0 +1,30 @@
+name: documind
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  # GPU stack (matches your RTX 5090 / CUDA 12.x)
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.1
+  # Core numerics
+  - numpy
+  - pandas
+  - scikit-learn
+  # API server
+  - fastapi
+  - uvicorn
+  # HTTP clients/tools
+  - requests
+  - httpx
+  # Install these via pip (latest wheels)
+  - pip:
+      - qdrant-client>=1.9.0
+      - sentence-transformers>=3.0.1
+      - transformers>=4.44.0
+      - pydantic
+      - python-dotenv
+      - tqdm
