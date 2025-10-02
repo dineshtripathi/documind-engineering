@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+export VISION_ENDPOINT="https://ais-documind-weu01.cognitiveservices.azure.com/"
+export VISION_KEY="----" 
+export QDRANT_URL="http://127.0.0.1:6333"
+export QDRANT_COLLECTION="documind_docs"
+export EMBED_MODEL="BAAI/bge-m3"
+export RERANK_MODEL="jinaai/jina-reranker-v1-turbo-en"
+export OLLAMA_URL="http://127.0.0.1:11434"
+export OLLAMA_MODEL="phi3.5:3.8b-mini-instruct-q4_0"
+export TOPK="12"
+export CONTEXT_K="4"
