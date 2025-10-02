@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 export VISION_ENDPOINT="https://ais-documind-weu01.cognitiveservices.azure.com/"
-export VISION_KEY=""
+export VISION_KEY="aaa"
 export QDRANT_URL="http://127.0.0.1:6333"
 export QDRANT_COLLECTION="documind_docs"
 export EMBED_MODEL="BAAI/bge-m3"
