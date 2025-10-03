@@ -3,8 +3,10 @@
 **DocuMind Hybrid** is a hybrid AI orchestration stack that combines **local LLMs** (running on RTX 5090 via Ollama) with **Azure AI Foundry** for scalable, secure, and enterprise-ready AI.  
 It integrates **.NET 8** (orchestration, APIs, agents) and **Python** (embeddings, data pipelines) into one cohesive system.
 
----
 
+![alt text](image.png)
+---
+![alt text](image-1.png)
 ## 🚀 Key Capabilities
 
 - **Hybrid LLM Orchestration**  
