@@ -1,4 +1,3 @@
-// Services/AskOrchestrator.cs
 using System.Diagnostics;
 using DocuMind.Api.Clients;
 using DocuMind.Api.Models;
@@ -29,12 +28,15 @@ public sealed class AskOrchestrator : IAskOrchestrator
 
     public async Task<AskResponse> AskAsync(string userQuery, CancellationToken ct = default)
     {
-        // 1) If RAG is required: try once, return unavailable if not satisfied.
+        RagAskResponse? lastRag = null;
+        long lastLocalMs = 0;
+
+        // 1) Hard dependency: RAG required
         if (_flags.RagRequired)
         {
             var sw = Stopwatch.StartNew();
             var rr = await _rag.AskAsync(userQuery, ct);
-            var localMs = (long)sw.ElapsedMilliseconds;
+            var localMs = sw.ElapsedMilliseconds;
 
             if (IsLocalAnswer(rr))
             {
@@ -50,35 +52,36 @@ public sealed class AskOrchestrator : IAskOrchestrator
                 new Timings(localMs, 0));
         }
 
-        // 2) Soft dependency: try local first if enabled.
+        // 2) Soft dependency: try local first
         if (_flags.UseRagFirst)
         {
             var sw = Stopwatch.StartNew();
-            var rr = await _rag.AskAsync(userQuery, ct);
-            var localMs = (long)sw.ElapsedMilliseconds;
+            lastRag = await _rag.AskAsync(userQuery, ct);
+            lastLocalMs = sw.ElapsedMilliseconds;
 
-            if (IsLocalAnswer(rr))
+            if (IsLocalAnswer(lastRag))
             {
-                _log.LogInformation("Route=local localMs={Local}", localMs);
-                return new AskResponse("local", rr!.Answer!, rr.ContextMap, new Timings(localMs, 0));
+                _log.LogInformation("Route=local localMs={Local}", lastLocalMs);
+                return new AskResponse("local", lastRag!.Answer!, lastRag.ContextMap, new Timings(lastLocalMs, 0));
             }
 
-            // Clean, single switchover line.
             _log.LogInformation("Switchover → Azure OpenAI (RAG unavailable or abstained).");
         }
 
-        // 3) Cloud fallback (always returns a body).
+        // 3) Cloud fallback (always returns a body)
         try
         {
             var sw = Stopwatch.StartNew();
             var cloud = await _aoai.ChatAsync(
-                system: "Answer concisely. If unsure, say 'I don’t know'.",
+                system: "Answer concisely. If unsure, say 'I don't know'.",
                 user: userQuery,
                 ct: ct);
-            var cloudMs = (long)sw.ElapsedMilliseconds;
+            var cloudMs = sw.ElapsedMilliseconds;
 
             _log.LogInformation("Route=cloud cloudMs={Cloud}", cloudMs);
-            return new AskResponse("cloud", cloud, Array.Empty<ContextItem>(), new Timings(0, cloudMs));
+            // Pass through any context we *did* retrieve locally (useful for UI tooltips)
+            var ctx = lastRag?.ContextMap ?? Array.Empty<ContextItem>();
+            return new AskResponse("cloud", cloud, ctx, new Timings(0, cloudMs));
         }
         catch (Exception ex)
         {

@@ -5,6 +5,7 @@ using DocuMind.Api.Services;
 using Polly;
 using Polly.Extensions.Http;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,11 @@ builder.Services.Configure<OllamaOptions>(builder.Configuration.GetSection("Olla
 // Controllers + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SupportNonNullableReferenceTypes();
+});
+
 static IAsyncPolicy<HttpResponseMessage> QuietRetryPolicy()
 {
     var delays = new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(300) };
@@ -42,13 +47,21 @@ var retryPolicy = HttpPolicyExtensions
     });
 
 // HttpClients
+builder.Services.Configure<RagOptions>(builder.Configuration.GetSection(RagOptions.Section));
 builder.Services.AddHttpClient<IRagClient, RagClient>((sp, http) =>
 {
-    var opt = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<RagOptions>>().Value;
-    http.BaseAddress = new Uri(opt.BaseUrl);
-    http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    http.Timeout = TimeSpan.FromSeconds(opt.TimeoutSeconds);
-}).AddPolicyHandler(sp => QuietRetryPolicy());
+    var o = sp.GetRequiredService<IOptions<RagOptions>>().Value;
+    http.BaseAddress = new Uri(o.BaseUrl.TrimEnd('/'));
+    http.Timeout = TimeSpan.FromSeconds(o.TimeoutSeconds);
+})
+.AddPolicyHandler(HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .WaitAndRetryAsync(new[]
+    {
+        TimeSpan.FromMilliseconds(200),
+        TimeSpan.FromMilliseconds(500),
+        TimeSpan.FromSeconds(1)
+    }));
 
 builder.Services.AddHttpClient<IOllamaClient, OllamaClient>((sp, http) =>
 {
