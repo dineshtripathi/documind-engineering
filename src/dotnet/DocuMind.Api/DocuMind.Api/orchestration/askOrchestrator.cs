@@ -1,13 +1,15 @@
+namespace DocuMind.Api.Orchestration;
+
 using System.Diagnostics;
 using DocuMind.Api.Clients;
 using DocuMind.Api.Models;
 using DocuMind.Api.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using DocuMind.Api.Services;
 
-namespace DocuMind.Api.Orchestration;
 
-public sealed class AskOrchestrator : DocuMind.Api.Services.IAskOrchestrator
+public sealed class AskOrchestrator : IAskOrchestrator
 {
     private readonly IRagClient _rag;
     private readonly IAzureOpenAiService _aoai;
