@@ -1,6 +1,6 @@
+using Documind.Contracts;
 using DocuMind.Api.Clients;     // <-- DTOs & IRagClient live here per our earlier code
 using Microsoft.AspNetCore.Mvc;
-using Documind.Contracts;
 
 
 namespace DocuMind.Api.Controllers;
@@ -29,7 +29,7 @@ public sealed class IngestController : ControllerBase
     }
 
     [HttpPost("url")]
-    public async Task<IActionResult> Url([FromBody] IngestUrlRequest req, CancellationToken ct)
+    public async Task<IActionResult> IngestUrl([FromBody] IngestUrlRequest req, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(req.Url))
             return BadRequest("url is required");

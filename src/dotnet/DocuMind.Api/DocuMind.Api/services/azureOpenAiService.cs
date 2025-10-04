@@ -1,8 +1,8 @@
-using OpenAI;
-using OpenAI.Chat;
 using System.ClientModel;
 using DocuMind.Api.Options;
 using Microsoft.Extensions.Options;
+using OpenAI;
+using OpenAI.Chat;
 
 namespace DocuMind.Api.Services;
 
@@ -16,12 +16,12 @@ public sealed class AzureOpenAiService : IAzureOpenAiService
     {
         var o = options.Value;
 
-        if (string.IsNullOrWhiteSpace(o.Endpoint))   throw new ArgumentNullException(nameof(o.Endpoint));
-        if (string.IsNullOrWhiteSpace(o.Key))        throw new ArgumentNullException(nameof(o.Key));
+        if (string.IsNullOrWhiteSpace(o.Endpoint)) throw new ArgumentNullException(nameof(o.Endpoint));
+        if (string.IsNullOrWhiteSpace(o.Key)) throw new ArgumentNullException(nameof(o.Key));
         if (string.IsNullOrWhiteSpace(o.Deployment)) throw new ArgumentNullException(nameof(o.Deployment));
 
         // IMPORTANT: mimic your working code – ensure /openai/v1/ suffix
-        _endpoint   = EnsureV1Suffix(o.Endpoint);
+        _endpoint = EnsureV1Suffix(o.Endpoint);
         _deployment = o.Deployment;
 
         log.LogInformation("AOAI init: endpoint={Endpoint} deployment={Deployment}", _endpoint, _deployment);

@@ -1,12 +1,12 @@
 namespace DocuMind.Api.Orchestration;
 
 using System.Diagnostics;
-using DocuMind.Api.Clients;
 using Documind.Contracts;
+using DocuMind.Api.Clients;
 using DocuMind.Api.Options;
+using DocuMind.Api.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using DocuMind.Api.Services;
 
 
 public sealed class AskOrchestrator : IAskOrchestrator

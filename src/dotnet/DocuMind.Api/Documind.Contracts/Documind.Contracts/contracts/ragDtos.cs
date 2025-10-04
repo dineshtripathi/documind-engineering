@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Http;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
 namespace Documind.Contracts;
 
 public sealed record RagAskResponse(string Route, string Answer, IReadOnlyList<ContextItem> ContextMap);

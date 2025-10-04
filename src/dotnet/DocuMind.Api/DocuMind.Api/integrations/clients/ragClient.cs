@@ -1,10 +1,10 @@
 // Clients/RagClient.cs
 using System.Net.Http.Json;
-using Documind.Contracts;
-using Microsoft.Extensions.Logging;
-using DocuMind.Api.Options;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Documind.Contracts;
+using DocuMind.Api.Options;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 namespace DocuMind.Api.Clients;
 
 public sealed class RagClient : IRagClient
