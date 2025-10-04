@@ -11,6 +11,7 @@
           "Azure.AI.OpenAI": "2.1.0",
           "Azure.Identity": "1.16.0",
           "Azure.Search.Documents": "11.6.1",
+          "Documind.Contracts": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "8.0.20",
           "Microsoft.Extensions.Configuration.UserSecrets": "9.0.9",
           "Microsoft.Extensions.Http.Polly": "9.0.9",
@@ -557,6 +558,14 @@
             "fileVersion": "9.0.925.41916"
           }
         }
+      },
+      "Documind.Contracts/1.0.0": {
+        "runtime": {
+          "Documind.Contracts.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -894,6 +903,11 @@
       "sha512": "sha512-NEnpppwq67fRz/OvQRxsEMgetDJsxlxpEsAFO/4PZYbAyAMd4Ol6KS7phc8uDoKPsnbdzRLKobpX303uQwCqdg==",
       "path": "system.text.json/9.0.9",
       "hashPath": "system.text.json.9.0.9.nupkg.sha512"
+    },
+    "Documind.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
