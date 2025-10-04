@@ -1,4 +1,4 @@
-namespace DocuMind.Api.Models;
+namespace Documind.Contracts;
 
 public sealed record AskRequest(string? Q, string? Prompt);
 public sealed record AskResponse(string Route, string Answer, IReadOnlyList<ContextItem> ContextMap, Timings Timings);

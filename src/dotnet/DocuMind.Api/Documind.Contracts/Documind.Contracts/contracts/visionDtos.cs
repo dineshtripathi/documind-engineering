@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace DocuMind.Contracts.Contracts.visionDtos
+namespace Documind.Contracts
 {
     public record TextBlocksDto(
         [property: JsonPropertyName("sourceId")] string SourceId,

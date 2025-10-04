@@ -1,4 +1,4 @@
-using DocuMind.Api.Models;
+using Documind.Contracts;
 namespace DocuMind.Api.Clients;
 
 public interface IRagClient

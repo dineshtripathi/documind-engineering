@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace DocuMind.Api.Models;
+namespace Documind.Contracts;
 
 public sealed class OllamaGenerateResponse
 {

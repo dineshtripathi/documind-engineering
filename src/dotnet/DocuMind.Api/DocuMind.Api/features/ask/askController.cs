@@ -1,5 +1,5 @@
 // Controllers/AskController.cs
-using DocuMind.Api.Models;
+using Documind.Contracts;
 using DocuMind.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 

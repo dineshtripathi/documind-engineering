@@ -4,6 +4,8 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuMind.Api", "DocuMind.Api\DocuMind.Api\DocuMind.Api.csproj", "{452A6701-EA25-3523-158B-D21746AF8A9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Contracts", "DocuMind.Api\Documind.Contracts\Documind.Contracts\Documind.Contracts.csproj", "{B8E7C891-1234-5678-9ABC-DEF123456789}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,10 @@ Global
 		{452A6701-EA25-3523-158B-D21746AF8A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{452A6701-EA25-3523-158B-D21746AF8A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{452A6701-EA25-3523-158B-D21746AF8A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E7C891-1234-5678-9ABC-DEF123456789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E7C891-1234-5678-9ABC-DEF123456789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E7C891-1234-5678-9ABC-DEF123456789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E7C891-1234-5678-9ABC-DEF123456789}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

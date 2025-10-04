@@ -1,6 +1,6 @@
 using DocuMind.Api.Clients;     // <-- DTOs & IRagClient live here per our earlier code
 using Microsoft.AspNetCore.Mvc;
-using  DocuMind.Api.Models;
+using Documind.Contracts;
 
 
 namespace DocuMind.Api.Controllers;

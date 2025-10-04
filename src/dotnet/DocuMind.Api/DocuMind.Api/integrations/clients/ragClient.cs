@@ -1,6 +1,6 @@
 // Clients/RagClient.cs
 using System.Net.Http.Json;
-using DocuMind.Api.Models;
+using Documind.Contracts;
 using Microsoft.Extensions.Logging;
 using DocuMind.Api.Options;
 using Microsoft.Extensions.Options;
@@ -37,24 +37,24 @@ public sealed class RagClient : IRagClient
     //     }
     // }
     public async Task<RagAskResponse?> AskAsync(string q, CancellationToken ct = default)
-{
-    try
     {
-        using var req = new HttpRequestMessage(HttpMethod.Get, $"/ask?q={Uri.EscapeDataString(q)}");
-        var r = await _http.SendAsync(req, ct);
-        if (!r.IsSuccessStatusCode) return null;
+        try
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Get, $"/ask?q={Uri.EscapeDataString(q)}");
+            var r = await _http.SendAsync(req, ct);
+            if (!r.IsSuccessStatusCode) return null;
 
-        var opts = new JsonSerializerOptions(JsonSerializerDefaults.Web); // camelCase
-        var resp = await r.Content.ReadFromJsonAsync<RagAskResponse>(opts, ct);
-        return resp;
+            var opts = new JsonSerializerOptions(JsonSerializerDefaults.Web); // camelCase
+            var resp = await r.Content.ReadFromJsonAsync<RagAskResponse>(opts, ct);
+            return resp;
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning(ex, "RAG unreachable/timeouts at {Base}", _http.BaseAddress);
+            return null;
+        }
     }
-    catch (Exception ex)
-    {
-        _log.LogWarning(ex, "RAG unreachable/timeouts at {Base}", _http.BaseAddress);
-        return null;
-    }
-}
-     public async Task<bool> IngestTextAsync(IngestTextRequest req, CancellationToken ct = default)
+    public async Task<bool> IngestTextAsync(IngestTextRequest req, CancellationToken ct = default)
     {
         try
         {

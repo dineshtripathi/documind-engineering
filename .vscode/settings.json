@@ -17,7 +17,8 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit",
-        "source.fixAll": "explicit"
+        "source.fixAll": "explicit",
+        "source.removeUnusedImports": "explicit"
     },
     // File associations
     "files.associations": {

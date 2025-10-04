@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using DocuMind.Api.Options;
-using DocuMind.Api.Models;
+using Documind.Contracts;
 using Microsoft.Extensions.Options;
 
 namespace DocuMind.Api.Clients;
@@ -23,7 +23,9 @@ public sealed class OllamaClient : IOllamaClient
     {
         var payload = new
         {
-            model = modelOverride ?? _opt.Model, prompt, stream = false,
+            model = modelOverride ?? _opt.Model,
+            prompt,
+            stream = false,
             options = new { temperature = temperature ?? _opt.Temperature }
         };
 
@@ -44,7 +46,9 @@ public sealed class OllamaClient : IOllamaClient
 
         var payload = new
         {
-            model = modelOverride ?? _opt.Model, stream = false, messages,
+            model = modelOverride ?? _opt.Model,
+            stream = false,
+            messages,
             options = new { temperature = temperature ?? _opt.Temperature }
         };
 
