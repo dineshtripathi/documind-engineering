@@ -1,10 +1,16 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuMind.Api", "DocuMind.Api\DocuMind.Api\DocuMind.Api.csproj", "{452A6701-EA25-3523-158B-D21746AF8A9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuMind.Api", "Documind\DocuMind.Api\DocuMind.Api.csproj", "{452A6701-EA25-3523-158B-D21746AF8A9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Contracts", "DocuMind.Api\Documind.Contracts\Documind.Contracts\Documind.Contracts.csproj", "{B8E7C891-1234-5678-9ABC-DEF123456789}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Contracts", "Documind\Documind.Contracts\Documind.Contracts.csproj", "{B8E7C891-1234-5678-9ABC-DEF123456789}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documind", "Documind", "{0AD41C53-5BF1-4F93-A5A3-5F85972E1D88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Common", "Documind\Documind.Common\Documind.Common.csproj", "{15DE2D8A-249E-492C-A95C-01CB25A342FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Vision", "Documind\Documind.Vision\Documind.Vision.csproj", "{6F70DEE5-1951-48B8-A5D2-30B756980EC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,11 +26,23 @@ Global
 		{B8E7C891-1234-5678-9ABC-DEF123456789}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8E7C891-1234-5678-9ABC-DEF123456789}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8E7C891-1234-5678-9ABC-DEF123456789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15DE2D8A-249E-492C-A95C-01CB25A342FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15DE2D8A-249E-492C-A95C-01CB25A342FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15DE2D8A-249E-492C-A95C-01CB25A342FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15DE2D8A-249E-492C-A95C-01CB25A342FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F70DEE5-1951-48B8-A5D2-30B756980EC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F70DEE5-1951-48B8-A5D2-30B756980EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F70DEE5-1951-48B8-A5D2-30B756980EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F70DEE5-1951-48B8-A5D2-30B756980EC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FB8077D-008D-4C46-9434-282A988AE9B5}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{15DE2D8A-249E-492C-A95C-01CB25A342FB} = {0AD41C53-5BF1-4F93-A5A3-5F85972E1D88}
+		{6F70DEE5-1951-48B8-A5D2-30B756980EC2} = {0AD41C53-5BF1-4F93-A5A3-5F85972E1D88}
 	EndGlobalSection
 EndGlobal

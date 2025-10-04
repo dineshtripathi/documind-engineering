@@ -1,0 +1,12 @@
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/bin/Debug/net8.0/Documind.Common.deps.json
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/bin/Debug/net8.0/Documind.Common.dll
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/bin/Debug/net8.0/Documind.Common.pdb
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.GeneratedMSBuildEditorConfig.editorconfig
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.AssemblyInfoInputs.cache
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.AssemblyInfo.cs
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.csproj.CoreCompileInputs.cache
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.sourcelink.json
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.dll
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/refint/Documind.Common.dll
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/Documind.Common.pdb
+/home/dinesh/documind-engineering/src/dotnet/Documind/Documind.Common/obj/Debug/net8.0/ref/Documind.Common.dll

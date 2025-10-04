@@ -1,0 +1,124 @@
+### Documind Vision API Test File
+### Base URL for local development
+@baseUrl = https://localhost:7002
+
+### Variables for testing
+@testImageUrl = https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Document_with_text.jpg/800px-Document_with_text.jpg
+@language = en
+
+###
+
+### Health Check - Detailed
+GET {{baseUrl}}/vision/healthz
+Accept: application/json
+
+###
+
+### Health Check - Simple
+GET {{baseUrl}}/vision/health
+Accept: application/json
+
+###
+
+### Analyze Image from URL
+POST {{baseUrl}}/vision/analyze
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}",
+  "language": "{{language}}",
+  "features": ["Read", "Caption", "Tags"]
+}
+
+###
+
+### Analyze Image from URL - Minimal
+POST {{baseUrl}}/vision/analyze
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}"
+}
+
+###
+
+### Analyze Image from URL - Only OCR
+POST {{baseUrl}}/vision/analyze
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}",
+  "language": "en",
+  "features": ["Read"]
+}
+
+###
+
+### Upload and Analyze File (replace with actual file path)
+POST {{baseUrl}}/vision/analyze-file?language={{language}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test-document.jpg"
+Content-Type: image/jpeg
+
+< /path/to/your/test-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Upload and Analyze File - No Language
+POST {{baseUrl}}/vision/analyze-file
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test-document.pdf"
+Content-Type: application/pdf
+
+< /path/to/your/test-document.pdf
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Error Test - Missing URL
+POST {{baseUrl}}/vision/analyze
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "",
+  "language": "en"
+}
+
+###
+
+### Error Test - Invalid URL
+POST {{baseUrl}}/vision/analyze
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "not-a-valid-url",
+  "language": "en"
+}
+
+###
+
+### Error Test - Missing File Upload
+POST {{baseUrl}}/vision/analyze-file
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="notfile"; filename=""
+Content-Type: application/octet-stream
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Swagger UI URL
+### Open in browser: {{baseUrl}}/swagger
+### Direct link to swagger.json: {{baseUrl}}/swagger/v1/swagger.json

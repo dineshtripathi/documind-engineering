@@ -1,0 +1,373 @@
+@DocuMind.Api_HostAddress = http://localhost:5266
+@RAG_Api_HostAddress = http://localhost:7001
+@Vision_Api_HostAddress = http://localhost:7002
+
+### Health Check - DocuMind API
+GET {{DocuMind.Api_HostAddress}}/healthz
+Accept: application/json
+
+### Health Check - Python RAG API
+GET {{RAG_Api_HostAddress}}/healthz
+Accept: application/json
+
+###########################################################
+### ENHANCED ASK ORCHESTRATOR TESTS
+###########################################################
+
+### Simple Query (Expected: Local Route)
+GET {{DocuMind.Api_HostAddress}}/ask?q=What is the company name?
+Accept: application/json
+
+###
+
+### Simple Question via POST
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "What is the backup policy?"
+}
+
+###
+
+### Complex Analysis Query (Expected: Cloud Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Analyze the legal implications and potential risks of implementing a disaster recovery strategy that relies heavily on cloud infrastructure, considering compliance requirements and data sovereignty issues"
+}
+
+###
+
+### Technical Domain Query (Expected: Hybrid/Local Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "How do I configure Kubernetes deployment for high availability and what are the best practices for container orchestration?"
+}
+
+###
+
+### Document Extraction Query (Expected: Local Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Extract all backup schedules and retention periods from the policy documents"
+}
+
+###
+
+### Medical Domain Query (Expected: Cloud Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "What are the contraindications and side effects of prescribing beta-blockers for patients with chronic heart failure?"
+}
+
+###
+
+### Code Analysis Query (Expected: Local Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Debug this function and explain why the authentication middleware is failing"
+}
+
+###
+
+### Creative Generation Query (Expected: Cloud Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Write a comprehensive marketing strategy for launching a new AI-powered document management system targeting enterprise customers"
+}
+
+###
+
+### Financial Analysis Query (Expected: Cloud Route)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Evaluate the ROI implications of migrating to cloud infrastructure and provide a detailed cost-benefit analysis with risk assessment"
+}
+
+###########################################################
+### DOCUMENT INGESTION TESTS
+###########################################################
+
+### Ingest Text Document
+POST {{DocuMind.Api_HostAddress}}/ingest/text
+Content-Type: application/json
+
+{
+  "docId": "test-policy-001",
+  "text": "Company Data Retention Policy: All customer data must be retained for a minimum of 7 years. Financial records require 10-year retention. Backup procedures include daily incremental backups at 2 AM UTC and weekly full backups on Sundays. Encryption standards mandate AES-256 for data at rest and TLS 1.3 for data in transit."
+}
+
+###
+
+### Ingest URL
+POST {{DocuMind.Api_HostAddress}}/ingest/url
+Content-Type: application/json
+
+{
+  "url": "https://example.com/policy-document.pdf",
+  "docId": "external-policy-001"
+}
+
+###
+
+### Ingest Blob (Azure Storage)
+POST {{DocuMind.Api_HostAddress}}/ingest/blob
+Content-Type: application/json
+
+{
+  "docId": "azure-blob-001",
+  "blobUrl": "https://mystorageaccount.blob.core.windows.net/documents/policy.pdf?sv=2023-01-03&st=2023-10-01&se=2023-12-31&sr=b&sp=r&sig=example",
+  "blobName": "policy.pdf"
+}
+
+###
+
+### Upload File (Multipart Form)
+POST {{DocuMind.Api_HostAddress}}/ingest/upload
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="file"; filename="test-document.txt"
+Content-Type: text/plain
+
+This is a test document for ingestion.
+It contains multiple lines of text
+that should be processed by the RAG system.
+
+Policy Update: Effective immediately, all access logs must be retained for audit purposes.
+--boundary123
+Content-Disposition: form-data; name="docId"
+
+uploaded-test-001
+--boundary123--
+
+###########################################################
+### DIRECT PYTHON RAG API TESTS
+###########################################################
+
+### Python RAG - Health Check
+GET {{RAG_Api_HostAddress}}/healthz
+Accept: application/json
+
+###
+
+### Python RAG - Direct Ask
+GET {{RAG_Api_HostAddress}}/ask?q=What is the backup retention policy?
+Accept: application/json
+
+###
+
+### Python RAG - Ask via POST
+POST {{RAG_Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "How often are backups performed?"
+}
+
+###
+
+### Python RAG - Build Prompt (for debugging)
+POST {{RAG_Api_HostAddress}}/build-prompt
+Content-Type: application/json
+
+{
+  "query": "disaster recovery procedures"
+}
+
+###
+
+### Python RAG - Search Documents
+GET {{RAG_Api_HostAddress}}/rag/search?q=backup schedule&k=5
+Accept: application/json
+
+###
+
+### Python RAG - Ingest Text
+POST {{RAG_Api_HostAddress}}/ingest/text
+Content-Type: application/json
+
+{
+  "doc_id": "rag-test-001",
+  "text": "Emergency Response Protocol: In case of system failure, immediately activate the disaster recovery plan. Contact the on-call engineer and initiate failover procedures to the secondary data center within 15 minutes."
+}
+
+###########################################################
+### QUERY COMPLEXITY ANALYSIS DEBUGGING
+###########################################################
+
+### Test Simple Complexity
+# Expected: QueryComplexity.Simple, QueryDomain.General, Local Route
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "What is this?"
+}
+
+###
+
+### Test Moderate Complexity
+# Expected: QueryComplexity.Moderate, QueryDomain.Technical, Hybrid Route
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "How does the API authentication middleware handle JWT token validation and refresh?"
+}
+
+###
+
+### Test Complex Reasoning
+# Expected: QueryComplexity.Complex, QueryDomain.Legal, Cloud Route
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Compare the legal implications of GDPR compliance versus CCPA requirements and analyze the impact on our data processing workflows"
+}
+
+###
+
+### Test Specialized Domain
+# Expected: QueryComplexity.Specialized, QueryDomain.Medical, Cloud Route
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Evaluate the pharmacokinetic properties and drug interactions of ACE inhibitors in patients with renal insufficiency"
+}
+
+###########################################################
+### CONFIDENCE SCORING EDGE CASES
+###########################################################
+
+### Test Low Confidence Query (should escalate to cloud)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "What is the meaning of life and how does quantum mechanics relate to consciousness in artificial intelligence systems?"
+}
+
+###
+
+### Test High Confidence Document Query
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "What are the specific backup retention periods mentioned in our policy documents?"
+}
+
+###
+
+### Test Hallucination-Prone Query
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "What did the CEO say about our Q4 earnings in the board meeting last week?"
+}
+
+###########################################################
+### ERROR HANDLING TESTS
+###########################################################
+
+### Empty Query
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": ""
+}
+
+###
+
+### Missing Query Parameter
+GET {{DocuMind.Api_HostAddress}}/ask
+Accept: application/json
+
+###
+
+### Invalid JSON
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "invalid": "json structure"
+}
+
+###
+
+### Very Long Query (stress test)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "This is an extremely long query designed to test the system's handling of verbose input that contains multiple complex concepts including artificial intelligence machine learning natural language processing document management systems enterprise software architecture cloud computing infrastructure disaster recovery business continuity planning data governance compliance regulations privacy policies security frameworks authentication authorization access control encryption key management backup strategies data retention policies audit logging monitoring alerting incident response procedures change management software development lifecycle continuous integration continuous deployment DevOps practices microservices containerization orchestration service mesh observability distributed tracing metrics collection log aggregation performance optimization scalability reliability availability fault tolerance resilience testing quality assurance user experience design interface development database management data modeling query optimization indexing caching distribution sharding replication consistency eventual consistency ACID properties transactions distributed systems consensus algorithms load balancing auto-scaling resource allocation cost optimization budget planning financial analysis return on investment total cost of ownership procurement vendor management contract negotiation service level agreements performance indicators key metrics benchmarking industry standards best practices recommendations guidelines documentation training support maintenance troubleshooting debugging optimization tuning configuration management environment provisioning infrastructure as code automation scripting monitoring dashboards reporting analytics business intelligence data visualization insights recommendations actionable intelligence decision support strategic planning tactical execution operational excellence continuous improvement innovation research development proof of concept pilot programs production deployment rollout strategies risk assessment mitigation contingency planning communication stakeholder engagement change management organizational transformation digital transformation technology adoption user adoption training programs knowledge transfer documentation standards processes procedures workflows collaboration tools project management methodologies agile scrum kanban lean six sigma quality management process improvement operational efficiency productivity enhancement resource utilization capacity planning demand forecasting trend analysis predictive analytics prescriptive analytics descriptive analytics diagnostic analytics data science machine learning artificial intelligence deep learning neural networks computer vision natural language understanding speech recognition automation robotics intelligent systems cognitive computing expert systems decision trees random forests gradient boosting support vector machines clustering classification regression reinforcement learning unsupervised learning supervised learning semi-supervised learning transfer learning federated learning edge computing fog computing cloud computing hybrid cloud multi-cloud serverless computing containerization microservices service-oriented architecture event-driven architecture message queues publish-subscribe patterns request-response patterns asynchronous processing batch processing stream processing real-time processing near-real-time processing data pipelines extract transform load data warehousing data lakes data marts data governance data quality data lineage data cataloging metadata management master data management reference data management data integration data synchronization data migration data archiving data purging data anonymization data pseudonymization privacy-preserving technologies differential privacy homomorphic encryption secure multi-party computation zero-knowledge proofs blockchain distributed ledger technologies smart contracts decentralized applications cryptocurrency digital assets tokenization non-fungible tokens decentralized finance decentralized autonomous organizations governance tokens utility tokens security tokens regulatory compliance anti-money laundering know your customer sanctions screening fraud detection risk management credit risk market risk operational risk liquidity risk concentration risk model risk technology risk cybersecurity risk information security risk data protection risk privacy risk reputational risk regulatory risk compliance risk legal risk environmental social governance sustainability reporting carbon footprint renewable energy green technology clean technology environmental impact assessment social impact assessment stakeholder capitalism corporate social responsibility ethical artificial intelligence responsible innovation inclusive design accessibility universal design human-centered design user experience research user interface design interaction design service design design thinking creative problem solving innovation management innovation culture innovation ecosystems startup ecosystems venture capital private equity angel investing crowdfunding initial coin offerings initial public offerings mergers acquisitions strategic partnerships joint ventures licensing intellectual property patents trademarks copyrights trade secrets competitive intelligence market research competitive analysis industry analysis macroeconomic analysis microeconomic analysis financial modeling valuation techniques discounted cash flow net present value internal rate of return payback period break-even analysis sensitivity analysis scenario analysis Monte Carlo simulation risk simulation stress testing?"
+}
+
+###########################################################
+### PERFORMANCE MONITORING
+###########################################################
+
+### Concurrent Queries (run multiple in parallel)
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Performance test query 1 - What is the disaster recovery RTO?"
+}
+
+###
+
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Performance test query 2 - How are backups encrypted?"
+}
+
+###
+
+POST {{DocuMind.Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Performance test query 3 - What is the data retention policy?"
+}
+
+###########################################################
+### VISION API INTEGRATION TESTS (if available)
+###########################################################
+
+### Vision API Health Check
+GET {{Vision_Api_HostAddress}}/healthz
+Accept: application/json
+
+###
+
+### Vision Analysis (URL-based)
+POST {{Vision_Api_HostAddress}}/analyze
+Content-Type: application/json
+
+{
+  "url": "https://example.com/sample-document.png"
+}
+
+###

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Documind.Vision</name>
+    </assembly>
+    <members>
+        <member name="T:Documind.Vision.Controllers.VisionController">
+            <summary>
+            Vision processing controller for document OCR and image analysis using Azure AI Vision
+            </summary>
+        </member>
+        <member name="T:Documind.Vision.Controllers.VisionController.AnalyzeUrlRequest">
+            <summary>
+            Request model for URL-based image analysis
+            </summary>
+            <param name="Url">The public URL of the image to analyze</param>
+            <param name="Language">Optional language code for OCR (e.g., 'en', 'es', 'fr')</param>
+            <param name="Features">Optional array of features to extract (Read, Caption, Tags)</param>
+        </member>
+        <member name="M:Documind.Vision.Controllers.VisionController.AnalyzeUrlRequest.#ctor(System.String,System.String,System.String[])">
+            <summary>
+            Request model for URL-based image analysis
+            </summary>
+            <param name="Url">The public URL of the image to analyze</param>
+            <param name="Language">Optional language code for OCR (e.g., 'en', 'es', 'fr')</param>
+            <param name="Features">Optional array of features to extract (Read, Caption, Tags)</param>
+        </member>
+        <member name="P:Documind.Vision.Controllers.VisionController.AnalyzeUrlRequest.Url">
+            <summary>The public URL of the image to analyze</summary>
+        </member>
+        <member name="P:Documind.Vision.Controllers.VisionController.AnalyzeUrlRequest.Language">
+            <summary>Optional language code for OCR (e.g., 'en', 'es', 'fr')</summary>
+        </member>
+        <member name="P:Documind.Vision.Controllers.VisionController.AnalyzeUrlRequest.Features">
+            <summary>Optional array of features to extract (Read, Caption, Tags)</summary>
+        </member>
+        <member name="M:Documind.Vision.Controllers.VisionController.Healthz">
+            <summary>
+            Health check endpoint for the Vision service
+            </summary>
+            <returns>Service health status and configuration validation</returns>
+            <response code="200">Service is healthy and properly configured</response>
+        </member>
+        <member name="M:Documind.Vision.Controllers.VisionController.Analyze(Documind.Vision.Controllers.VisionController.AnalyzeUrlRequest,System.Threading.CancellationToken)">
+            <summary>
+            Analyzes an image from a URL using Azure AI Vision for OCR and content extraction
+            </summary>
+            <param name="req">The analysis request containing the image URL and options</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Extracted text blocks, captions, and metadata from the image</returns>
+            <response code="200">Analysis completed successfully</response>
+            <response code="400">Invalid request parameters</response>
+            <response code="500">Internal server error during analysis</response>
+        </member>
+        <member name="M:Documind.Vision.Controllers.VisionController.AnalyzeFile(Microsoft.AspNetCore.Http.IFormFile,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Analyzes an uploaded image or PDF file using Azure AI Vision for OCR and content extraction
+            </summary>
+            <param name="file">The image or PDF file to analyze (max 25MB)</param>
+            <param name="language">Optional language code for OCR (e.g., 'en', 'es', 'fr')</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Extracted text blocks, captions, and metadata from the uploaded file</returns>
+            <response code="200">File analysis completed successfully</response>
+            <response code="400">Invalid file or missing file</response>
+            <response code="500">Internal server error during file analysis</response>
+        </member>
+        <member name="M:Documind.Vision.Controllers.VisionController.Health">
+            <summary>
+            Simple health check endpoint
+            </summary>
+            <returns>Basic service health information</returns>
+            <response code="200">Service is running</response>
+        </member>
+        <member name="T:Documind.Vision.Models.HealthResponse">
+            <summary>
+            Health check response model
+            </summary>
+        </member>
+        <member name="P:Documind.Vision.Models.HealthResponse.Status">
+            <summary>
+            Service health status (ok, warn, error)
+            </summary>
+            <example>ok</example>
+        </member>
+        <member name="P:Documind.Vision.Models.HealthResponse.Service">
+            <summary>
+            Service name
+            </summary>
+            <example>DocuMind.Vision</example>
+        </member>
+        <member name="P:Documind.Vision.Models.HealthResponse.Timestamp">
+            <summary>
+            Response timestamp
+            </summary>
+            <example>2025-10-04T10:30:00Z</example>
+        </member>
+        <member name="T:Documind.Vision.Models.ErrorResponse">
+            <summary>
+            Error response model
+            </summary>
+        </member>
+        <member name="P:Documind.Vision.Models.ErrorResponse.Message">
+            <summary>
+            Error message
+            </summary>
+            <example>url is required</example>
+        </member>
+        <member name="P:Documind.Vision.Models.ErrorResponse.CorrelationId">
+            <summary>
+            Optional correlation ID for tracking
+            </summary>
+            <example>12345678-1234-1234-1234-123456789abc</example>
+        </member>
+        <member name="T:Documind.Vision.Services.AzureVisionClient">
+            <summary>
+            Azure AI Vision client for computer vision and OCR operations
+            </summary>
+        </member>
+        <member name="M:Documind.Vision.Services.AzureVisionClient.AnalyzeUrlAsync(System.String,System.String,System.String,System.String[],System.String,System.Threading.CancellationToken)">
+            <summary>
+            Analyzes an image from a URL using Azure Computer Vision API
+            </summary>
+        </member>
+        <member name="M:Documind.Vision.Services.AzureVisionClient.AnalyzeBytesAsync(System.String,System.String,System.IO.Stream,System.String[],System.String,System.Threading.CancellationToken)">
+            <summary>
+            Analyzes an image from bytes using Azure Computer Vision API
+            </summary>
+        </member>
+        <member name="T:Documind.Vision.Services.ExampleSchemaFilter">
+            <summary>
+            Schema filter to add examples to Swagger documentation
+            </summary>
+        </member>
+        <member name="T:Documind.Vision.Services.IVisionService">
+            <summary>
+            Interface for vision processing services
+            </summary>
+        </member>
+        <member name="M:Documind.Vision.Services.IVisionService.AnalyzeUrlAsync(System.String,System.String,System.String[],System.Threading.CancellationToken)">
+            <summary>
+            Analyze an image from a URL and extract text
+            </summary>
+        </member>
+        <member name="M:Documind.Vision.Services.IVisionService.AnalyzeFileAsync(System.IO.Stream,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Analyze an uploaded image file and extract text
+            </summary>
+        </member>
+        <member name="T:Documind.Vision.Services.VisionService">
+            <summary>
+            Vision processing service implementation using Azure AI Vision
+            </summary>
+        </member>
+    </members>
+</doc>
