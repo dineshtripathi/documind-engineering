@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Documind.Contracts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+821559e7c10a55ebb5383c537034fd4e655c6221")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60eca57d82886a54c3e9fd16392192a5af8604c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Documind.Contracts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Documind.Contracts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

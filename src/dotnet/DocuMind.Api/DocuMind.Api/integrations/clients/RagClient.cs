@@ -1,6 +1,7 @@
 // Clients/RagClient.cs
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text;
 using Documind.Contracts;
 using DocuMind.Api.Options;
 using Microsoft.Extensions.Logging;
@@ -17,25 +18,23 @@ public sealed class RagClient : IRagClient
         _http = http; _log = log;
     }
 
-    // public async Task<RagAskResponse?> AskAsync(string q, CancellationToken ct = default)
-    // {
-    //     try
-    //     {
-    //         var url = $"/ask?q={Uri.EscapeDataString(q)}";
-    //         using var resp = await _http.GetAsync(url, ct);
-    //         if (!resp.IsSuccessStatusCode)
-    //         {
-    //             _log.LogWarning("RAG /ask non-success: {Status}", (int)resp.StatusCode);
-    //             return null;
-    //         }
-    //         return await resp.Content.ReadFromJsonAsync<RagAskResponse>(cancellationToken: ct);
-    //     }
-    //     catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-    //     {
-    //         _log.LogWarning("RAG unreachable/timeouts at {Base}", _http.BaseAddress);
-    //         return null; // ← key: gracefully fallback
-    //     }
-    // }
+    public async Task<string> IndexBlocksAsync(TextBlocksDto dto, CancellationToken ct = default)
+    {
+        using var res = await _http.PostAsync("/index/blocks",
+            new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"), ct);
+
+        res.EnsureSuccessStatusCode();
+        using var doc = JsonDocument.Parse(await res.Content.ReadAsStringAsync(ct));
+        return doc.RootElement.TryGetProperty("batchId", out var b) ? (b.GetString() ?? "unknown") : "unknown";
+    }
+
+    // helper
+    private async Task<bool> PostOkAsync<T>(string route, T body, CancellationToken ct)
+    {
+        using var res = await _http.PostAsJsonAsync(route, body, ct);
+        return res.IsSuccessStatusCode;
+    }
+
     public async Task<RagAskResponse?> AskAsync(string q, CancellationToken ct = default)
     {
         try
@@ -53,6 +52,8 @@ public sealed class RagClient : IRagClient
             _log.LogWarning(ex, "RAG unreachable/timeouts at {Base}", _http.BaseAddress);
             return null;
         }
+
+
     }
     public async Task<bool> IngestTextAsync(IngestTextRequest req, CancellationToken ct = default)
     {

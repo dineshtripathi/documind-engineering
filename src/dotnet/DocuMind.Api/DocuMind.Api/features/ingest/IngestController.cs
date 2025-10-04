@@ -11,11 +11,13 @@ public sealed class IngestController : ControllerBase
 {
     private readonly IRagClient _rag;
     private readonly ILogger<IngestController> _log;
+    private readonly IVisionClient _vision;
 
-    public IngestController(IRagClient rag, ILogger<IngestController> log)
+    public IngestController(IRagClient rag, IVisionClient vision, ILogger<IngestController> log)
     {
         _rag = rag;
         _log = log;
+        _vision = vision;
     }
 
     [HttpPost("text")]
@@ -61,6 +63,38 @@ public sealed class IngestController : ControllerBase
 
         var ok = await _rag.UploadAsync(form.File, form.DocId, ct);
         return Ok(new { ok, docId = form.DocId ?? form.File.FileName });
+    }
+
+    [HttpPost("vision-url")]
+    public async Task<IActionResult> VisionUrl([FromBody] IngestUrlRequest req, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(req.Url))
+            return BadRequest("url is required");
+
+        // 1) Vision OCR / analyze
+        TextBlocksDto dto = await _vision.AnalyzeUrlAsync(req.Url, req.Language ?? "en", req.Features, ct);
+
+        // 2) Index to RAG
+        var batchId = await _rag.IndexBlocksAsync(dto, ct);
+        return Ok(new { ok = true, batchId, items = dto.Blocks.Count, req.Url });
+    }
+
+    [HttpPost("vision-file")]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(100_000_000)]
+    public async Task<IActionResult> VisionFile([FromForm] UploadIngestForm form, CancellationToken ct)
+    {
+        if (form.File is null || form.File.Length == 0)
+            return BadRequest("file is required");
+
+        await using var s = form.File.OpenReadStream();
+
+        // 1) Vision OCR / analyze
+        TextBlocksDto dto = await _vision.AnalyzeFileAsync(s, form.File.FileName, form.Language ?? "en", ct);
+
+        // 2) Index to RAG
+        var batchId = await _rag.IndexBlocksAsync(dto, ct);
+        return Ok(new { ok = true, batchId, items = dto.Blocks.Count, docId = form.DocId ?? form.File.FileName });
     }
 }
 
