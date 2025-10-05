@@ -1,11 +1,32 @@
-fastapi
-uvicorn[standard]
-qdrant-client>=1.9.0
-sentence-transformers>=3.0.1
+# Core API framework
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.8.0
+
+# AI/ML stack (CUDA 12.8 enabled)
+# Note: PyTorch with CUDA 12.8 should be installed using:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+# This is handled automatically by setup.sh
+torch>=2.1.0
+torchvision
+torchaudio
 transformers>=4.44.0
-torch==2.8.0+cu128
-numpy
-requests
+sentence-transformers>=3.0.1
+accelerate>=0.30.0
+numpy>=1.24.0
+scikit-learn
+
+# Vector database
+qdrant-client>=1.9.0
+
+# Azure services
 azure-ai-vision-imageanalysis==1.0.0
-azure-core
-azure-identity
+azure-core>=1.29.0
+azure-identity>=1.15.0
+
+# Utilities
+requests>=2.31.0
+httpx>=0.27.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+tiktoken>=0.7.0

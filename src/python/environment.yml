@@ -1,30 +1,39 @@
 name: documind
 channels:
+  - pytorch
+  - nvidia
   - conda-forge
   - defaults
 dependencies:
   - python=3.11
   - pip
-  # GPU stack (matches your RTX 5090 / CUDA 12.x)
-  - pytorch
-  - torchvision
-  - torchaudio
-  - pytorch-cuda=12.1
-  # Core numerics
-  - numpy
+  # Note: PyTorch with CUDA 12.8 installed via pip (see pip section below)
+  # Core scientific computing
+  - numpy>=1.24.0
   - pandas
   - scikit-learn
-  # API server
-  - fastapi
-  - uvicorn
-  # HTTP clients/tools
-  - requests
-  - httpx
-  # Install these via pip (latest wheels)
+  # HTTP and utilities
+  - requests>=2.31.0
+  - curl
+  - git
+  # Install remaining via pip for latest versions
   - pip:
-      - qdrant-client>=1.9.0
-      - sentence-transformers>=3.0.1
+      # Core API framework
+      - fastapi>=0.111.0
+      - uvicorn[standard]>=0.30.0
+      - pydantic>=2.8.0
+      # AI/ML libraries (PyTorch with CUDA 12.8 - handled by setup.sh)
       - transformers>=4.44.0
-      - pydantic
-      - python-dotenv
-      - tqdm
+      - sentence-transformers>=3.0.1
+      - accelerate>=0.30.0
+      # Vector database
+      - qdrant-client>=1.9.0
+      # Azure services
+      - azure-ai-vision-imageanalysis==1.0.0
+      - azure-core>=1.29.0
+      - azure-identity>=1.15.0
+      # Utilities
+      - httpx>=0.27.0
+      - python-dotenv>=1.0.0
+      - tqdm>=4.66.0
+      - tiktoken>=0.7.0

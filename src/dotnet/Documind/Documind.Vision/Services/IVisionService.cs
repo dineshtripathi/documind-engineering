@@ -16,4 +16,14 @@ public interface IVisionService
     /// Analyze an uploaded image file and extract text
     /// </summary>
     Task<TextBlocksDto> AnalyzeFileAsync(Stream stream, string fileName, string? language, CancellationToken ct = default);
+    /// <summary>
+    /// Analyzes a raw image or PDF stream using Azure AI Vision.
+    /// </summary>
+    Task<string> AnalyzeBytesAsync(
+        string endpoint,
+        string key,
+        Stream bytes,
+        string[]? features,
+        string? language,
+        CancellationToken ct);
 }
