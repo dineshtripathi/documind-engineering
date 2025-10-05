@@ -112,11 +112,10 @@ public sealed class VisionController : ControllerBase
     /// <summary>
     /// Analyzes an uploaded image or PDF file using Azure AI Vision for OCR and content extraction
     /// </summary>
-    /// <param name="file">The image or PDF file to analyze (max 25MB)</param>
-    /// <param name="language">Optional language code for OCR (e.g., 'en', 'es', 'fr')</param>
+    /// <param name="request">The file upload request containing file and optional language parameter</param>
     /// <param name="ct">Cancellation token</param>
-    /// <returns>Extracted text blocks, captions, and metadata from the uploaded file</returns>
-    /// <response code="200">File analysis completed successfully</response>
+    /// <returns>Extracted text blocks, captions, and metadata from the file</returns>
+    /// <response code="200">Analysis completed successfully</response>
     /// <response code="400">Invalid file or missing file</response>
     /// <response code="500">Internal server error during file analysis</response>
     [HttpPost("analyze-file")]
@@ -126,9 +125,9 @@ public sealed class VisionController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(OperationResult<TextBlocksDto>), StatusCodes.Status500InternalServerError)]
     [Produces("application/json")]
-    public async Task<IActionResult> AnalyzeFile([FromForm] IFormFile file, [FromQuery] string? language, CancellationToken ct)
+    public async Task<IActionResult> AnalyzeFile([FromForm] FileUploadRequest request, CancellationToken ct)
     {
-        if (file is null || file.Length == 0)
+        if (request.File is null || request.File.Length == 0)
         {
             return BadRequest(new ErrorResponse
             {
@@ -142,10 +141,10 @@ public sealed class VisionController : ControllerBase
         try
         {
             _logger.LogInformation("Processing file: {FileName}, Size: {Size} bytes, Type: {Type}, CorrelationId: {CorrelationId}",
-                file.FileName, file.Length, GuessType(file.FileName), correlationId);
+                request.File.FileName, request.File.Length, GuessType(request.File.FileName), correlationId);
 
-            await using var stream = file.OpenReadStream();
-            var result = await _visionService.AnalyzeFileAsync(stream, file.FileName, language, ct);
+            await using var stream = request.File.OpenReadStream();
+            var result = await _visionService.AnalyzeFileAsync(stream, request.File.FileName, request.Language, ct);
 
             return Ok(OperationResult<TextBlocksDto>.Success(result, correlationId));
         }

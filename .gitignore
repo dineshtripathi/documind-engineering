@@ -18,7 +18,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-# Visual Studio 
+# Visual Studio
 .vs/
 *.suo
 *.user

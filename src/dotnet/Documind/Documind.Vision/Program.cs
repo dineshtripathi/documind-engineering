@@ -1,7 +1,13 @@
 using Documind.Common.Constants;
 using Documind.Vision.Services;
+using Documind.Vision.Options;
+using Documind.Vision.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuration
+builder.Services.Configure<VisionOptions>(builder.Configuration.GetSection(VisionOptions.Section));
+builder.Services.Configure<AzureVisionOptions>(builder.Configuration.GetSection(AzureVisionOptions.Section));
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -33,8 +39,8 @@ builder.Services.AddSwaggerGen(c =>
         c.IncludeXmlComments(xmlPath);
     }
 
-    // Add schema filter for examples
-    c.SchemaFilter<ExampleSchemaFilter>();
+    // Support for file uploads
+    // c.OperationFilter<FileUploadOperationFilter>();
 });
 
 // Register vision services
@@ -55,15 +61,8 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Documind Vision API v1");
-        c.RoutePrefix = string.Empty; // Serve Swagger UI at root
-    });
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseCors();
