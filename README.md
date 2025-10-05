@@ -190,7 +190,7 @@ This project includes **educational implementations** comparing Microsoft's Sema
 
 **Semantic Kernel (Port 5076):**
 - Traditional function composition
-- Direct kernel service integration  
+- Direct kernel service integration
 - Compatible with production packages
 - Proven stability for enterprise use
 
@@ -235,7 +235,7 @@ AZURE_OPENAI_ENDPOINT=https://documind-openai.openai.azure.com/
 AZURE_OPENAI_API_KEY=your_api_key_here
 AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini
 
-# Azure Vision Configuration  
+# Azure Vision Configuration
 AZURE_VISION_ENDPOINT=https://your-vision-resource.cognitiveservices.azure.com/
 AZURE_VISION_API_KEY=your_vision_key_here
 
@@ -253,7 +253,7 @@ OLLAMA_MODEL=phi3.5:3.8b
 **appsettings.json locations:**
 ```
 src/dotnet/DocuMind.Api/DocuMind.Api/appsettings.json               # Main API
-src/dotnet/DocuMind.Api/Documind.Vision/appsettings.json           # Vision Service  
+src/dotnet/DocuMind.Api/Documind.Vision/appsettings.json           # Vision Service
 src/dotnet/DocuMind.Api/DocuMind.Agents.SemanticKernel/appsettings.json    # Semantic Kernel
 src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework/appsettings.json    # Agent Framework
 ```
@@ -287,7 +287,7 @@ POST   /api/vision/describe              # Image description
 
 **RAG Processing:**
 ```bash
-GET    /health                           # RAG service health  
+GET    /health                           # RAG service health
 POST   /query                            # Direct RAG query processing
 GET    /models/status                    # Model loading status
 POST   /embeddings                       # Generate embeddings
@@ -423,7 +423,7 @@ netstat -tlnp | grep -E ":(5266|7001|7002|5076|8082|6333)"
 # Main API health
 curl -f http://localhost:5266/health || echo "Main API down"
 
-# RAG API health  
+# RAG API health
 curl -f http://localhost:7001/health || echo "RAG API down"
 
 # Vision API health
@@ -488,7 +488,7 @@ dotnet run --urls "http://localhost:5266" &
 MAIN_PID=$!
 cd ../../../..
 
-# Vision API  
+# Vision API
 cd src/dotnet/DocuMind.Api/Documind.Vision
 dotnet run --urls "http://localhost:7002" &
 VISION_PID=$!
@@ -500,7 +500,7 @@ dotnet run --urls "http://localhost:5076" &
 SK_PID=$!
 cd ../../../..
 
-cd src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework  
+cd src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework
 dotnet run --urls "http://localhost:8082" &
 AF_PID=$!
 cd ../../../..
@@ -532,7 +532,7 @@ echo "=========================="
 
 services=(
     "Main API:5266:http://localhost:5266/health"
-    "RAG API:7001:http://localhost:7001/health"  
+    "RAG API:7001:http://localhost:7001/health"
     "Vision API:7002:http://localhost:7002/health"
     "Semantic Kernel:5076:http://localhost:5076/health"
     "Agent Framework:8082:http://localhost:8082/health"
@@ -544,7 +544,7 @@ all_healthy=true
 for service in "${services[@]}"; do
     IFS=':' read -r name port url <<< "$service"
     printf "%-20s " "$name"
-    
+
     if curl -sf "$url" > /dev/null 2>&1; then
         echo "✅ Healthy (Port $port)"
     else
@@ -719,7 +719,7 @@ services:
       - "80:5266"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      
+
   rag-api:
     build: ./src/python
     ports:
@@ -870,7 +870,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Technologies & Frameworks:**
 - Microsoft Semantic Kernel & Agent Framework teams
-- FastAPI and Pydantic communities  
+- FastAPI and Pydantic communities
 - Qdrant vector database developers
 - NVIDIA CUDA and PyTorch teams
 - Azure AI Services team

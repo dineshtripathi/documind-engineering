@@ -12,7 +12,7 @@ python-multipart>=0.0.6           # File upload support
 
 # AI/ML Core Stack (CUDA 12.8 Compatible)
 torch>=2.1.0                       # PyTorch with CUDA support
-torchvision>=0.16.0                # Computer vision utilities  
+torchvision>=0.16.0                # Computer vision utilities
 torchaudio>=2.1.0                  # Audio processing utilities
 transformers>=4.44.0               # Hugging Face transformers
 sentence-transformers>=3.0.1       # Semantic similarity models
@@ -25,7 +25,7 @@ InstructorEmbedding>=1.0.1         # Instructor embedding models
 FlagEmbedding>=1.2.10              # BAAI embedding models (bge-m3)
 # Note: Jina reranker installed via sentence-transformers
 
-# Vector Database & Search  
+# Vector Database & Search
 qdrant-client>=1.9.0               # Qdrant vector database client
 faiss-cpu>=1.7.4                   # Facebook AI similarity search (CPU)
 # faiss-gpu>=1.7.4                 # Uncomment for GPU-accelerated FAISS
@@ -68,7 +68,7 @@ rich>=13.7.0                      # Rich text and beautiful formatting
 loguru>=0.7.0                     # Advanced logging
 tiktoken>=0.7.0                   # OpenAI tokenizer
 
-# Testing & Quality Assurance  
+# Testing & Quality Assurance
 pytest>=7.4.0                     # Testing framework
 pytest-asyncio>=0.21.0           # Async testing support
 pytest-cov>=4.1.0                # Coverage reporting

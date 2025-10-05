@@ -5,7 +5,7 @@ echo "=========================="
 
 services=(
     "Main API:5266:http://127.0.0.1:5266/swagger"
-    "RAG API:7001:http://127.0.0.1:7001/healthz"  
+    "RAG API:7001:http://127.0.0.1:7001/healthz"
     "Vision API:7002:http://127.0.0.1:7002/swagger"
     "Semantic Kernel:5076:http://127.0.0.1:5076/swagger"
     "Agent Framework:8082:http://127.0.0.1:8082/"
@@ -18,7 +18,7 @@ all_healthy=true
 for service in "${services[@]}"; do
     IFS=':' read -r name port url <<< "$service"
     printf "%-20s " "$name"
-    
+
     if curl -sf "$url" > /dev/null 2>&1; then
         echo "✅ Healthy (Port $port)"
     else
@@ -33,7 +33,7 @@ if $all_healthy; then
     echo ""
     echo "🔗 Quick Access Links:"
     echo "  • Main API: http://127.0.0.1:5266/swagger"
-    echo "  • RAG API Docs: http://127.0.0.1:7001/docs" 
+    echo "  • RAG API Docs: http://127.0.0.1:7001/docs"
     echo "  • Vision API: http://127.0.0.1:7002/swagger"
     echo "  • Semantic Kernel: http://127.0.0.1:5076/swagger"
     echo "  • Agent Framework: http://127.0.0.1:8082/swagger"

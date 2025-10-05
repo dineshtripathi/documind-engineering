@@ -8,7 +8,7 @@
 🧪 DocuMind Health Check... ✅ PASSED
 ==========================
 Main API             ✅ Healthy (Port 5266)
-RAG API              ✅ Healthy (Port 7001)  
+RAG API              ✅ Healthy (Port 7001)
 Vision API           ✅ Healthy (Port 7002)
 Semantic Kernel      ✅ Healthy (Port 5076)
 Agent Framework      ✅ Healthy (Port 8082)
@@ -39,7 +39,7 @@ curl -X POST 'http://127.0.0.1:7001/ask' \
 ```
 **Result**: ✅ Working - Returns contextualized answer with citations
 
-### ✅ Main API Orchestration  
+### ✅ Main API Orchestration
 ```bash
 curl -X POST 'http://127.0.0.1:5266/Ask' \
   -H 'Content-Type: application/json' \
@@ -79,7 +79,7 @@ curl "http://127.0.0.1:8082/" | jq '.endpoints'
 # Start all services (if needed)
 ./scripts/start-all.sh
 
-# Stop all services  
+# Stop all services
 ./scripts/stop-all.sh
 
 # Individual service management
@@ -98,7 +98,7 @@ curl "http://127.0.0.1:8082/" | jq '.endpoints'
 
 ### 📖 Educational Framework Documentation
 - ✅ **Semantic Kernel vs Agent Framework**: Side-by-side comparison implemented
-- ✅ **Learning Workflows**: Educational patterns for multi-agent orchestration  
+- ✅ **Learning Workflows**: Educational patterns for multi-agent orchestration
 - ✅ **Best Practices**: Version compatibility solutions documented
 - ✅ **Usage Examples**: Comprehensive API testing examples provided
 

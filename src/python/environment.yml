@@ -6,42 +6,42 @@
 
 name: documind
 channels:
-  - pytorch          # PyTorch official channel
-  - nvidia           # NVIDIA CUDA packages  
-  - conda-forge      # Community packages
-  - defaults         # Anaconda default packages
+  - pytorch # PyTorch official channel
+  - nvidia # NVIDIA CUDA packages
+  - conda-forge # Community packages
+  - defaults # Anaconda default packages
 
 dependencies:
   # Python Runtime
-  - python=3.11                    # Python 3.11 for optimal compatibility
+  - python=3.11 # Python 3.11 for optimal compatibility
 
   # Core Development Tools
-  - pip                           # Python package installer
-  - git                           # Version control
-  - curl                          # HTTP client
-  - wget                          # File downloader
+  - pip # Python package installer
+  - git # Version control
+  - curl # HTTP client
+  - wget # File downloader
 
   # Scientific Computing Foundation (Conda optimized)
-  - numpy>=1.24.0                 # Numerical computing
-  - pandas>=2.1.0                 # Data manipulation
-  - scikit-learn>=1.3.0          # Machine learning utilities
-  - scipy>=1.11.0                # Scientific computing
+  - numpy>=1.24.0 # Numerical computing
+  - pandas>=2.1.0 # Data manipulation
+  - scikit-learn>=1.3.0 # Machine learning utilities
+  - scipy>=1.11.0 # Scientific computing
 
   # HTTP & Networking (Conda optimized)
-  - requests>=2.31.0             # HTTP library
-  - aiohttp>=3.9.0               # Async HTTP client/server
+  - requests>=2.31.0 # HTTP library
+  - aiohttp>=3.9.0 # Async HTTP client/server
 
   # Development Utilities
-  - jupyter                       # Jupyter notebook support
-  - ipykernel                    # Jupyter kernel
-  - matplotlib>=3.8.0           # Plotting library
-  - seaborn>=0.13.0              # Statistical visualization
+  - jupyter # Jupyter notebook support
+  - ipykernel # Jupyter kernel
+  - matplotlib>=3.8.0 # Plotting library
+  - seaborn>=0.13.0 # Statistical visualization
 
   # System Utilities
-  - psutil>=5.9.0                # System monitoring
-  
+  - psutil>=5.9.0 # System monitoring
+
   # GPU Support (if available)
-  - cudatoolkit                  # CUDA development toolkit (conda managed)
+  - cudatoolkit # CUDA development toolkit (conda managed)
 
   # Pip-only packages (latest versions)
   - pip:
@@ -50,7 +50,7 @@ dependencies:
       - uvicorn[standard]>=0.30.0
       - pydantic>=2.8.0
       - python-multipart>=0.0.6
-      
+
       # AI/ML Stack (CUDA support via pip for latest versions)
       # PyTorch with CUDA 12.8 - installed separately via setup script
       - transformers>=4.44.0
@@ -58,43 +58,43 @@ dependencies:
       - accelerate>=0.30.0
       - InstructorEmbedding>=1.0.1
       - FlagEmbedding>=1.2.10
-      
+
       # Vector Database & Search
       - qdrant-client>=1.9.0
       - faiss-cpu>=1.7.4
-      
+
       # Azure AI Services
       - azure-ai-vision-imageanalysis==1.0.0
       - azure-core>=1.29.0
       - azure-identity>=1.15.0
       - azure-storage-blob>=12.19.0
-      
+
       # LLM Integration
       - openai>=1.35.0
       - anthropic>=0.25.0
-      
+
       # Data Processing
       - PyPDF2>=3.0.1
       - python-docx>=1.1.0
       - openpyxl>=3.1.0
       - beautifulsoup4>=4.12.0
       - lxml>=4.9.0
-      
+
       # HTTP & Async (latest versions)
       - httpx>=0.27.0
       - websockets>=12.0
-      
+
       # Configuration & Environment
       - python-dotenv>=1.0.0
       - pydantic-settings>=2.3.0
       - pyyaml>=6.0.1
-      
+
       # Development & Debugging
       - tqdm>=4.66.0
       - rich>=13.7.0
       - loguru>=0.7.0
       - tiktoken>=0.7.0
-      
+
       # Testing & Quality
       - pytest>=7.4.0
       - pytest-asyncio>=0.21.0
@@ -102,11 +102,11 @@ dependencies:
       - black>=23.9.0
       - flake8>=6.1.0
       - mypy>=1.6.0
-      
+
       # Performance & Monitoring
       - memory-profiler>=0.61.0
       - py-spy>=0.3.14
-      
+
       # Production Deployment
       - gunicorn>=21.2.0
       - redis>=5.0.0

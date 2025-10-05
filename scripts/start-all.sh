@@ -31,7 +31,7 @@ dotnet run --urls "http://localhost:5266" &
 MAIN_PID=$!
 cd ../../../..
 
-# Vision API  
+# Vision API
 cd src/dotnet/DocuMind.Api/Documind.Vision
 dotnet run --urls "http://localhost:7002" &
 VISION_PID=$!
@@ -43,7 +43,7 @@ dotnet run --urls "http://localhost:5076" &
 SK_PID=$!
 cd ../../../..
 
-cd src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework  
+cd src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework
 dotnet run --urls "http://localhost:8082" &
 AF_PID=$!
 cd ../../../..
