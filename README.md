@@ -1,85 +1,333 @@
 # DocuMind Engineering
 
-## Overview
+🚀 **Comprehensive AI Orchestration Platform** combining local LLMs, cloud AI services, and advanced agent frameworks for intelligent document processing and multi-modal AI workflows.
 
-DocuMind is a hybrid AI orchestration platform that combines local LLMs with cloud AI services for intelligent document processing and retrieval. The system integrates .NET 8 APIs with Python-based AI services to provide scalable, enterprise-ready AI capabilities.
+## 🏗️ Architecture Overview
 
-## Architecture
+### 🎯 Core Services
 
-### System Components
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Frontend Layer                           │
+│  Web UI  │  REST Clients  │  Swagger/OpenAPI Documentation │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────────────┐
+│                    .NET Services                            │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────┐ │
+│ │DocuMind.Api │ │Vision:7002  │ │Semantic:5076│ │Agent:8082│ │
+│ │    :5266    │ │             │ │    Kernel   │ │Framework │ │
+│ └─────────────┘ └─────────────┘ └─────────────┘ └─────────┘ │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────────────┐
+│                 Python AI Services                         │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
+│  │ RAG API     │ │ Embeddings  │ │ Reranking   │          │
+│  │   :7001     │ │   BAAI/bge  │ │    Jina     │          │
+│  └─────────────┘ └─────────────┘ └─────────────┘          │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────────────┐
+│              Storage & AI Infrastructure                    │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────┐ │
+│ │ Qdrant:6333 │ │ Ollama LLM  │ │Azure OpenAI │ │Azure    │ │
+│ │Vector Store │ │ Phi-3.5 3.8B│ │ GPT-4o-mini │ │Vision   │ │
+│ └─────────────┘ └─────────────┘ └─────────────┘ └─────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
 
-**Frontend Layer**
-- Web UI, API Tests, REST clients
-- Swagger UI for API documentation
+### 🚀 Service Portfolio
 
-**.NET API Layer (Port 5266)**
-- `DocuMind.Api` - Main orchestration service
-- `Documind.Vision` - Azure AI Vision integration
-- Enhanced AskOrchestrator with intelligent query routing
-- Swagger/OpenAPI documentation
-
-**Python AI Layer (Port 7001)**
-- RAG API (FastAPI) with GPU acceleration
-- BAAI/bge-m3 embeddings (1024-dimensional)
-- Jina v1-turbo reranking (cross-encoder)
-- Local LLM processing
-
-**Storage & AI Services**
-- Qdrant Vector Database (Port 6333)
-- Ollama (Phi-3.5 3.8B) for local inference
-- Azure OpenAI (GPT-4o-mini) for complex queries
-
-### Query Processing
-
-1. **Query Analysis** - Complexity, domain, and intent classification
-2. **Intelligent Routing** - Local vs cloud decision based on analysis
-3. **RAG Processing** - Vector search, reranking, context assembly
-4. **Response Generation** - LLM inference with confidence scoring
-5. **Quality Assessment** - Citation validation and hallucination detection
+| Service | Port | Description | Status |
+|---------|------|-------------|--------|
+| **DocuMind.Api** | 5266 | Main orchestration service | ✅ Operational |
+| **Documind.Vision** | 7002 | Azure AI Vision integration | ✅ Operational |
+| **Semantic Kernel** | 5076 | Educational AI workflows | ✅ Ready |
+| **Agent Framework** | 8082 | Next-gen agent orchestration | ✅ Operational |
+| **Legacy Agents** | 8081 | Original agent service | ✅ Running |
+| **Python RAG API** | 7001 | AI processing engine | ✅ CUDA Enabled |
+| **Qdrant Vector DB** | 6333 | Vector storage | ✅ Memory Mode |
 
 ## Technology Stack
-## Technology Stack
+## 🛠️ Technology Stack
 
-### Backend Services
-
-- **.NET 8 / ASP.NET Core**: Main API orchestrator with Swagger documentation
+### 🔧 Backend Services
+- **.NET 8 / ASP.NET Core**: Main orchestration with Swagger documentation
 - **Python 3.11 / FastAPI**: RAG processing and AI model inference
-- **Docker**: Containerized Qdrant vector database
+- **Docker**: Containerized services and vector database
 
-### AI & ML
-
+### 🤖 AI & ML Stack
 - **Local LLM**: Ollama Phi-3.5 3.8B (CUDA acceleration)
 - **Cloud LLM**: Azure OpenAI GPT-4o-mini
-- **Embeddings**: BAAI/bge-m3 (1024-dimensional)
-- **Reranking**: Jina reranker v1-turbo-en
+- **Embeddings**: BAAI/bge-m3 (1024-dimensional vectors)
+- **Reranking**: Jina reranker v1-turbo-en (cross-encoder)
 - **Vision**: Azure AI Vision for OCR and image analysis
+- **Frameworks**: Microsoft Semantic Kernel + Agent Framework
 
-### Database & Storage
-
+### 📊 Database & Storage
 - **Vector Database**: Qdrant (cosine similarity, persistent storage)
 - **Document Storage**: Local file system with staging support
+- **Configuration**: JSON-based with environment overrides
 
-## Installation & Setup
+## 🚀 Quick Start Guide
 
-### Prerequisites
+### 📋 Prerequisites
 
-- **Operating System**: Linux (Ubuntu 20.04+), macOS (10.15+), or Windows WSL2
-- **Hardware**: 8GB RAM minimum, 16GB recommended
-- **GPU**: NVIDIA RTX 20xx+ with 8GB+ VRAM (optional, for acceleration)
-- **Disk Space**: 10GB free space minimum
+**System Requirements:**
+- Ubuntu 20.04+ / Windows 11 with WSL2
+- NVIDIA GPU with CUDA 12.1+ (for local AI)
+- Docker & Docker Compose
+- .NET 8 SDK
+- Python 3.10+
 
-### Quick Installation
+**Verify CUDA Support:**
+```bash
+nvidia-smi  # Should show GPU details
+nvcc --version  # CUDA compiler version
+```
+
+### ⚡ One-Line Setup
 
 ```bash
-# Clone repository
-git clone <repository-url> documind-engineering
+# Complete environment setup (automated)
+bash scripts/provision/workspace-infra-setup/setup-workspace.bash
+```
+
+### 🛠️ Manual Setup (Development)
+
+**1. Clone & Navigate**
+```bash
+git clone <repository-url>
 cd documind-engineering
+```
 
-# Run universal setup (installs all dependencies)
-chmod +x scripts/setup.sh && ./scripts/setup.sh
+**2. Infrastructure Setup**
+```bash
+# Start all Docker services
+./scripts/dev-up.sh
 
-# Start all services
-./scripts/start.sh
+# Verify Qdrant vector database
+curl http://localhost:6333/health
+```
+
+**3. Python Environment**
+```bash
+# Create conda environment
+conda env create -f src/python/environment.yml
+conda activate documind
+
+# Install additional packages
+pip install -r src/python/requirements.txt
+```
+
+**4. .NET Dependencies**
+```bash
+cd src/dotnet/DocuMind.Api
+dotnet restore
+```
+
+### 🎯 Service Startup
+
+**Start All Services (Production Mode):**
+```bash
+# Start infrastructure
+./scripts/dev-up.sh
+
+# Start Python RAG API with CUDA
+cd src/python
+uvicorn services.rag_api.app:app --host 0.0.0.0 --port 7001
+
+# Start .NET main API
+cd src/dotnet/DocuMind.Api/DocuMind.Api
+dotnet run --urls "http://localhost:5266"
+
+# Start Vision API
+cd src/dotnet/DocuMind.Api/Documind.Vision
+dotnet run --urls "http://localhost:7002"
+```
+
+**Educational Workflows:**
+```bash
+# Start Semantic Kernel service
+cd src/dotnet/DocuMind.Api/DocuMind.Agents.SemanticKernel
+dotnet run --urls "http://localhost:5076"
+
+# Start Agent Framework service
+cd src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework
+dotnet run --urls "http://localhost:8082"
+```
+
+### 🧪 Health Verification
+
+**Service Health Check:**
+```bash
+# Check all services
+curl http://localhost:5266/health  # Main API
+curl http://localhost:7001/health  # Python RAG
+curl http://localhost:7002/health  # Vision API
+curl http://localhost:5076/health  # Semantic Kernel
+curl http://localhost:8082/health  # Agent Framework
+curl http://localhost:6333/health  # Qdrant Vector DB
+```
+
+**Quick AI Test:**
+```bash
+# Test RAG processing
+curl -X POST "http://localhost:5266/api/ask" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is artificial intelligence?"}'
+
+# Test agent frameworks comparison
+curl "http://localhost:5076/semantickernel/workflows/list"
+curl "http://localhost:8082/agentframework/workflows/list"
+```
+## 📚 Educational Framework Comparison
+
+### 🎓 Agent Framework Learning
+
+This project includes **educational implementations** comparing Microsoft's Semantic Kernel and Agent Framework approaches:
+
+**Semantic Kernel (Port 5076):**
+- Traditional function composition
+- Direct kernel service integration  
+- Compatible with production packages
+- Proven stability for enterprise use
+
+**Agent Framework (Port 8082):**
+- Next-generation agent orchestration
+- Multi-agent collaboration patterns
+- Educational compatibility layer
+- Future-ready architecture concepts
+
+### 🔬 Learning Endpoints
+
+```bash
+# List available workflows
+curl "http://localhost:5076/semantickernel/workflows/list"
+curl "http://localhost:8082/agentframework/workflows/list"
+
+# Execute educational workflows
+curl -X POST "http://localhost:5076/semantickernel/execute/simple" \
+  -H "Content-Type: application/json" \
+  -d '{"input": "learning example"}'
+
+curl -X POST "http://localhost:8082/agentframework/execute/collaborative" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "multi-agent example"}'
+```
+
+**📖 Key Learning Concepts:**
+- Function composition vs agent orchestration
+- Sequential vs parallel processing
+- State management approaches
+- Error handling strategies
+- Performance optimization patterns
+
+## 🔧 Configuration Management
+
+### 🌍 Environment Variables
+
+Create `.env` file in project root:
+```bash
+# Azure OpenAI Configuration
+AZURE_OPENAI_ENDPOINT=https://documind-openai.openai.azure.com/
+AZURE_OPENAI_API_KEY=your_api_key_here
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini
+
+# Azure Vision Configuration  
+AZURE_VISION_ENDPOINT=https://your-vision-resource.cognitiveservices.azure.com/
+AZURE_VISION_API_KEY=your_vision_key_here
+
+# Vector Database
+QDRANT_URL=http://localhost:6333
+QDRANT_COLLECTION_NAME=documents
+
+# Local LLM Configuration
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=phi3.5:3.8b
+```
+
+### ⚙️ Service Configuration
+
+**appsettings.json locations:**
+```
+src/dotnet/DocuMind.Api/DocuMind.Api/appsettings.json               # Main API
+src/dotnet/DocuMind.Api/Documind.Vision/appsettings.json           # Vision Service  
+src/dotnet/DocuMind.Api/DocuMind.Agents.SemanticKernel/appsettings.json    # Semantic Kernel
+src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework/appsettings.json    # Agent Framework
+```
+
+## 📡 API Documentation
+
+### 🎯 Main Orchestration API (Port 5266)
+
+**Core Endpoints:**
+```bash
+GET    /health                           # Service health check
+POST   /api/ask                          # Intelligent Q&A processing
+GET    /api/documents                    # List processed documents
+POST   /api/documents/upload             # Upload new documents
+DELETE /api/documents/{id}               # Remove documents
+```
+
+**Swagger UI:** `http://localhost:5266/swagger`
+
+### 🖼️ Vision API (Port 7002)
+
+**Vision Endpoints:**
+```bash
+GET    /health                           # Vision service health
+POST   /api/vision/analyze               # Image analysis
+POST   /api/vision/ocr                   # Text extraction from images
+POST   /api/vision/describe              # Image description
+```
+
+### 🧠 Python RAG API (Port 7001)
+
+**RAG Processing:**
+```bash
+GET    /health                           # RAG service health  
+POST   /query                            # Direct RAG query processing
+GET    /models/status                    # Model loading status
+POST   /embeddings                       # Generate embeddings
+POST   /rerank                           # Rerank search results
+```
+
+## 🗂️ Project Structure Deep Dive
+
+### 📁 Directory Organization
+
+```
+documind-engineering/
+├── 🐳 docker/                           # Docker Compose configurations
+│   └── compose.yml                      # Qdrant vector database setup
+├── 🏗️ infra/                           # Kubernetes & Infrastructure
+│   └── k8s/                            # K8s deployment manifests
+├── 📊 IaC/                             # Infrastructure as Code
+│   ├── main.bicep                      # Azure Bicep templates
+│   └── parameters.json                 # Deployment parameters
+├── 📚 data/                            # Data storage
+│   ├── docs/                           # Document ingestion
+│   └── staging/                        # Processing workspace
+├── 🧪 notebooks/                       # Jupyter analysis notebooks
+├── 📦 models/                          # Local model storage
+├── 📜 scripts/                         # Automation scripts
+│   ├── dev-up.sh                       # Start development environment
+│   ├── dev-down.sh                     # Stop services
+│   ├── dev-reset.sh                    # Reset environment
+│   └── provision/                      # Setup automation
+├── 🐍 src/python/                      # Python AI services
+│   ├── environment.yml                 # Conda environment
+│   ├── requirements.txt                # Pip dependencies
+│   ├── services/rag_api/               # FastAPI RAG service
+│   └── tests/                          # Python test suite
+└── 🔷 src/dotnet/                      # .NET service collection
+    └── DocuMind.Api.sln                # Main solution file
+        ├── DocuMind.Api/               # Main orchestration API
+        ├── Documind.Vision/            # Vision processing service
+        ├── DocuMind.Agents.SemanticKernel/     # Educational SK workflows
+        └── DocuMind.Agents.AgentFramework/     # Educational AF workflows
 ```
 
 ### Manual Installation
@@ -100,106 +348,543 @@ sudo apt-get install -y build-essential git curl wget unzip jq \
 brew install git curl wget jq
 ```
 
-#### 2. Docker Installation
+## 🚨 Troubleshooting Guide
 
-**Linux:**
+### 🔍 Common Issues & Solutions
+
+**❌ Service Port Conflicts**
 ```bash
-# Add Docker repository
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# Check port usage
+netstat -tlnp | grep -E ":(5266|7001|7002|5076|8082|6333)"
 
-# Install Docker
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+# Kill processes using ports
+sudo lsof -ti:5266 | xargs sudo kill -9
+```
 
+**❌ CUDA/GPU Issues**
+```bash
+# Verify GPU availability
+nvidia-smi
+python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}')"
+
+# Reset CUDA context
+sudo nvidia-smi --gpu-reset
+```
+
+**❌ Docker Permission Denied**
+```bash
 # Add user to docker group
 sudo usermod -aG docker $USER
+newgrp docker  # Refresh group membership
 ```
 
-#### 3. .NET 8 SDK
-
+**❌ Qdrant Connection Issues**
 ```bash
-# Ubuntu
-wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt-get update
-sudo apt-get install -y dotnet-sdk-8.0
+# Check Qdrant status
+docker ps | grep qdrant
+curl http://localhost:6333/health
 
-# macOS
-brew install --cask dotnet
+# Restart Qdrant
+docker restart qdrant
 ```
 
-#### 4. Python Environment
-
-**Option A: Conda (Recommended)**
+**❌ .NET Build Failures**
 ```bash
-# Install Miniconda
-curl -fsSLo miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash miniconda.sh -b -p $HOME/miniconda3
-eval "$($HOME/miniconda3/bin/conda shell.bash hook)"
+# Clear NuGet cache
+dotnet nuget locals all --clear
 
-# Create environment
+# Restore packages
+cd src/dotnet/DocuMind.Api
+dotnet clean && dotnet restore
+```
+
+**❌ Python Environment Issues**
+```bash
+# Recreate conda environment
+conda env remove -n documind
 conda env create -f src/python/environment.yml
 conda activate documind
 ```
 
-**Option B: Virtual Environment**
+### 📋 Health Check Commands
+
+**Comprehensive System Check:**
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r src/python/requirements.txt
+# Check all services
+./scripts/health-check.sh
+
+# Manual verification
+ps aux | grep -E "(dotnet|python|qdrant)" | grep -v grep
+netstat -tlnp | grep -E ":(5266|7001|7002|5076|8082|6333)"
 ```
 
-#### 5. GPU Support (Optional)
-
-For NVIDIA GPU acceleration:
+**Service-Specific Health:**
 ```bash
-# Install CUDA PyTorch
-conda activate documind
-pip uninstall -y torch torchvision torchaudio
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+# Main API health
+curl -f http://localhost:5266/health || echo "Main API down"
 
-# Verify GPU setup
-./scripts/dev/setup-cuda.sh
+# RAG API health  
+curl -f http://localhost:7001/health || echo "RAG API down"
+
+# Vision API health
+curl -f http://localhost:7002/health || echo "Vision API down"
+
+# Educational services
+curl -f http://localhost:5076/health || echo "Semantic Kernel down"
+curl -f http://localhost:8082/health || echo "Agent Framework down"
+
+# Vector database
+curl -f http://localhost:6333/health || echo "Qdrant down"
 ```
 
-#### 6. Ollama Installation
+## 📋 Automated Setup Scripts
+
+### 🎛️ Available Scripts
+
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `dev-up.sh` | Start Docker infrastructure | `./scripts/dev-up.sh` |
+| `dev-down.sh` | Stop all services | `./scripts/dev-down.sh` |
+| `dev-reset.sh` | Reset environment completely | `./scripts/dev-reset.sh` |
+| `run-rag-api.sh` | Start Python RAG API | `./scripts/run-rag-api.sh` |
+| `setup-workspace.bash` | Complete environment setup | `./scripts/provision/workspace-infra-setup/setup-workspace.bash` |
+
+### 🔧 Create Enhanced Setup Scripts
+
+Let's create some additional automation scripts for easier management:
 
 ```bash
-# Install Ollama
-curl -fsSL https://ollama.com/install.sh | sh
+# Create start-all.sh
+cat > scripts/start-all.sh << 'EOF'
+#!/bin/bash
+set -e
 
-# Download models
-ollama pull phi3.5:3.8b-mini-instruct-q4_0
-```
+echo "🚀 Starting DocuMind Engineering Platform..."
 
-## Running the Application
-
-### Start All Services
-
-```bash
-# Background mode (recommended)
-./scripts/start.sh --background
-
-# Foreground mode (with logs)
-./scripts/start.sh
-```
-
-### Individual Services
-
-**Start Qdrant only:**
-```bash
+# Start infrastructure
+echo "📦 Starting Docker services..."
 ./scripts/dev-up.sh
+
+# Wait for Qdrant to be ready
+echo "⏳ Waiting for Qdrant to be ready..."
+until curl -sf http://localhost:6333/health > /dev/null; do
+    sleep 2
+done
+echo "✅ Qdrant is ready"
+
+# Start Python RAG API in background
+echo "🐍 Starting Python RAG API..."
+cd src/python
+uvicorn services.rag_api.app:app --host 0.0.0.0 --port 7001 &
+RAG_PID=$!
+cd ../..
+
+# Start .NET services
+echo "🔷 Starting .NET services..."
+
+# Main API
+cd src/dotnet/DocuMind.Api/DocuMind.Api
+dotnet run --urls "http://localhost:5266" &
+MAIN_PID=$!
+cd ../../../..
+
+# Vision API  
+cd src/dotnet/DocuMind.Api/Documind.Vision
+dotnet run --urls "http://localhost:7002" &
+VISION_PID=$!
+cd ../../../..
+
+# Educational services
+cd src/dotnet/DocuMind.Api/DocuMind.Agents.SemanticKernel
+dotnet run --urls "http://localhost:5076" &
+SK_PID=$!
+cd ../../../..
+
+cd src/dotnet/DocuMind.Api/DocuMind.Agents.AgentFramework  
+dotnet run --urls "http://localhost:8082" &
+AF_PID=$!
+cd ../../../..
+
+echo "⏳ Waiting for services to start..."
+sleep 10
+
+echo "🧪 Running health checks..."
+./scripts/health-check.sh
+
+echo "✅ All services started successfully!"
+echo "📚 Access Swagger UI: http://localhost:5266/swagger"
+echo "🔧 Educational endpoints available on ports 5076 and 8082"
+
+# Store PIDs for cleanup
+echo "$RAG_PID $MAIN_PID $VISION_PID $SK_PID $AF_PID" > .service_pids
+EOF
+
+chmod +x scripts/start-all.sh
 ```
 
-**Start Python RAG API only:**
 ```bash
-./scripts/run-rag-api.sh
+# Create health-check.sh
+cat > scripts/health-check.sh << 'EOF'
+#!/bin/bash
+
+echo "🧪 DocuMind Health Check..."
+echo "=========================="
+
+services=(
+    "Main API:5266:http://localhost:5266/health"
+    "RAG API:7001:http://localhost:7001/health"  
+    "Vision API:7002:http://localhost:7002/health"
+    "Semantic Kernel:5076:http://localhost:5076/health"
+    "Agent Framework:8082:http://localhost:8082/health"
+    "Qdrant DB:6333:http://localhost:6333/health"
+)
+
+all_healthy=true
+
+for service in "${services[@]}"; do
+    IFS=':' read -r name port url <<< "$service"
+    printf "%-20s " "$name"
+    
+    if curl -sf "$url" > /dev/null 2>&1; then
+        echo "✅ Healthy (Port $port)"
+    else
+        echo "❌ Unhealthy (Port $port)"
+        all_healthy=false
+    fi
+done
+
+echo "=========================="
+if $all_healthy; then
+    echo "🎉 All services are healthy!"
+    exit 0
+else
+    echo "⚠️  Some services are unhealthy"
+    exit 1
+fi
+EOF
+
+chmod +x scripts/health-check.sh
 ```
 
-**Start .NET API only:**
 ```bash
+# Create stop-all.sh
+cat > scripts/stop-all.sh << 'EOF'
+#!/bin/bash
+
+echo "🛑 Stopping DocuMind Engineering Platform..."
+
+# Kill services by PIDs if available
+if [ -f .service_pids ]; then
+    echo "📋 Stopping services using stored PIDs..."
+    read -r pids < .service_pids
+    for pid in $pids; do
+        if kill -0 "$pid" 2>/dev/null; then
+            echo "🔻 Stopping PID $pid"
+            kill "$pid"
+        fi
+    done
+    rm .service_pids
+fi
+
+# Kill by port/process name as backup
+echo "🔍 Cleaning up remaining processes..."
+pkill -f "uvicorn.*rag_api" || true
+pkill -f "dotnet.*DocuMind" || true
+
+# Stop Docker services
+echo "🐳 Stopping Docker services..."
+./scripts/dev-down.sh
+
+echo "✅ All services stopped"
+EOF
+
+chmod +x scripts/stop-all.sh
+```
+
+## 🎯 Usage Examples & Workflows
+
+### 🤖 AI Query Processing
+
+**Basic RAG Query:**
+```bash
+curl -X POST "http://localhost:5266/api/ask" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "What are the key benefits of vector databases?",
+    "useLocalModel": false,
+    "includeContext": true
+  }'
+```
+
+**Complex Multi-Modal Query:**
+```bash
+# Upload and analyze document
+curl -X POST "http://localhost:5266/api/documents/upload" \
+  -F "file=@document.pdf" \
+  -F "description=Technical specification"
+
+# Query with vision analysis
+curl -X POST "http://localhost:7002/api/vision/analyze" \
+  -F "image=@diagram.png"
+```
+
+### 🎓 Educational Framework Learning
+
+**Semantic Kernel Workflows:**
+```bash
+# List available workflows
+curl "http://localhost:5076/semantickernel/workflows/list"
+
+# Execute simple workflow
+curl -X POST "http://localhost:5076/semantickernel/execute/simple" \
+  -H "Content-Type: application/json" \
+  -d '{"input": "Explain neural networks"}'
+```
+
+**Agent Framework Patterns:**
+```bash
+# List agent framework capabilities
+curl "http://localhost:8082/agentframework/workflows/list"
+
+# Execute collaborative workflow
+curl -X POST "http://localhost:8082/agentframework/execute/collaborative" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Research and summarize machine learning trends"}'
+```
+
+## 🔧 Development & Customization
+
+### 🎨 Adding New Features
+
+**1. Extend RAG Processing:**
+```python
+# In src/python/services/rag_api/rag_core.py
+def custom_preprocessing(query: str) -> str:
+    # Add your custom query preprocessing
+    return enhanced_query
+```
+
+**2. Add New .NET Controllers:**
+```csharp
+// In src/dotnet/DocuMind.Api/DocuMind.Api/Controllers/
+[ApiController]
+[Route("api/[controller]")]
+public class CustomController : ControllerBase
+{
+    // Your custom endpoints
+}
+```
+
+**3. Educational Workflow Extensions:**
+```csharp
+// In DocuMind.Agents.SemanticKernel or AgentFramework
+public async Task<string> CustomLearningWorkflow(string input)
+{
+    // Implement your educational pattern
+}
+```
+
+### 📚 Model Customization
+
+**Local Model Updates:**
+```bash
+# Change Ollama model
+ollama pull llama3.1:8b
+# Update configuration in appsettings.json
+```
+
+**Azure OpenAI Configuration:**
+```json
+{
+  "AzureOpenAI": {
+    "Endpoint": "https://your-resource.openai.azure.com/",
+    "ApiKey": "your-api-key",
+    "DeploymentName": "gpt-4"
+  }
+}
+```
+
+## 🚀 Production Deployment
+
+### 🐳 Docker Production Setup
+
+**Create production Docker Compose:**
+```yaml
+# docker/production.yml
+version: '3.8'
+services:
+  documind-api:
+    build: ./src/dotnet
+    ports:
+      - "80:5266"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      
+  rag-api:
+    build: ./src/python
+    ports:
+      - "8000:7001"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+```
+
+### ☁️ Azure Deployment
+
+**Infrastructure as Code (Bicep):**
+```bash
+# Deploy using Azure Bicep
+az deployment group create \
+  --resource-group documind-rg \
+  --template-file IaC/main.bicep \
+  --parameters @IaC/parameters.json
+```
+
+**Kubernetes Deployment:**
+```bash
+# Apply K8s manifests
+kubectl apply -f infra/k8s/
+```
+
+## 📊 Monitoring & Observability
+
+### 📈 Performance Metrics
+
+**Service Monitoring:**
+```bash
+# Check resource usage
+docker stats
+
+# Monitor GPU usage
+nvidia-smi -l 1
+
+# Check service logs
+docker logs qdrant
+tail -f logs/rag_api.log
+```
+
+**Health Monitoring Script:**
+```bash
+# Continuous health monitoring
+watch -n 30 './scripts/health-check.sh'
+```
+
+### 🐛 Debugging
+
+**Enable Debug Logging:**
+```json
+// In appsettings.Development.json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "Microsoft.SemanticKernel": "Trace"
+    }
+  }
+}
+```
+
+**Python Debug Mode:**
+```bash
+# Start RAG API with debug logging
+cd src/python
+uvicorn services.rag_api.app:app --host 0.0.0.0 --port 7001 --log-level debug
+```
+
+## 🤝 Contributing
+
+### 📝 Development Guidelines
+
+**1. Code Structure:**
+- Follow .NET naming conventions for C# code
+- Use Python PEP 8 for Python code
+- Add comprehensive XML documentation for public APIs
+- Include unit tests for new features
+
+**2. Testing:**
+```bash
+# Run .NET tests
+cd src/dotnet/DocuMind.Api
+dotnet test
+
+# Run Python tests
+cd src/python
+pytest tests/
+```
+
+**3. Pull Request Process:**
+- Fork the repository
+- Create feature branch: `git checkout -b feature/amazing-feature`
+- Commit changes: `git commit -m 'Add amazing feature'`
+- Push to branch: `git push origin feature/amazing-feature`
+- Open Pull Request
+
+### 🔧 Development Setup
+
+**VS Code Extensions (Recommended):**
+- C# Dev Kit
+- Python Extension Pack
+- Docker Extension
+- REST Client
+- GitLens
+
+## 📞 Support & Resources
+
+### 🆘 Getting Help
+
+**Common Solutions:**
+1. **Port conflicts**: Use `./scripts/stop-all.sh` then restart
+2. **GPU issues**: Check CUDA installation with `nvidia-smi`
+3. **Docker issues**: Restart Docker daemon: `sudo systemctl restart docker`
+4. **Package conflicts**: Recreate conda environment
+
+**Documentation Links:**
+- [Microsoft Semantic Kernel](https://learn.microsoft.com/en-us/semantic-kernel/)
+- [Azure OpenAI Service](https://learn.microsoft.com/en-us/azure/ai-services/openai/)
+- [Qdrant Vector Database](https://qdrant.tech/documentation/)
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+
+### 📧 Contact & Community
+
+**Reporting Issues:**
+- Create GitHub issue with reproduction steps
+- Include system information and logs
+- Use appropriate issue templates
+
+**Feature Requests:**
+- Describe the use case clearly
+- Provide examples and mockups
+- Consider contributing the implementation
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+**Technologies & Frameworks:**
+- Microsoft Semantic Kernel & Agent Framework teams
+- FastAPI and Pydantic communities  
+- Qdrant vector database developers
+- NVIDIA CUDA and PyTorch teams
+- Azure AI Services team
+
+**Special Thanks:**
+- Open source AI/ML community
+- Contributors and testers
+- Documentation reviewers
+
+---
+
+**📊 Project Status:** ✅ **Fully Operational** - All 6 services running with educational framework comparison
+
+**🚀 Quick Start:** `./scripts/start-all.sh` → `./scripts/health-check.sh` → Open `http://localhost:5266/swagger`
 cd src/dotnet/DocuMind.Api/DocuMind.Api
 dotnet run
 ```

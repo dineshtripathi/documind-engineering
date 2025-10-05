@@ -12,7 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Common", "Documind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documind.Vision", "Documind\Documind.Vision\Documind.Vision.csproj", "{6F70DEE5-1951-48B8-A5D2-30B756980EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuMind.Agents", "DocuMind.Agents\DocuMind.Agents.csproj", "{CA0B45B9-ED6D-45DE-98CE-8B2C228FC790}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuMind.Agents.Semantic", "DocuMind.Agents.Semantic\DocuMind.Agents.Semantic.csproj", "{CA0B45B9-ED6D-45DE-98CE-8B2C228FC790}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuMind.Agents.AgentFramework", "DocuMind.Agents.AgentFramework\DocuMind.Agents.AgentFramework.csproj", "{BE5E5I9G-CF5I-8HBE-DG7H-6I9H5F8GIBCH}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{CA0B45B9-ED6D-45DE-98CE-8B2C228FC790}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA0B45B9-ED6D-45DE-98CE-8B2C228FC790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA0B45B9-ED6D-45DE-98CE-8B2C228FC790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5E5I9G-CF5I-8HBE-DG7H-6I9H5F8GIBCH}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5E5I9G-CF5I-8HBE-DG7H-6I9H5F8GIBCH}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5E5I9G-CF5I-8HBE-DG7H-6I9H5F8GIBCH}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5E5I9G-CF5I-8HBE-DG7H-6I9H5F8GIBCH}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

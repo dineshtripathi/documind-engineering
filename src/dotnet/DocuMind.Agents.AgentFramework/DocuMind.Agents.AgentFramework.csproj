@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Suppress evaluation warnings for educational comparison -->
+    <NoWarn>$(NoWarn);SKEXP0110;OPENAI001</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.20" />
+
+    <!-- Microsoft Agent Framework packages - using latest preview versions for consistency -->
+    <PackageReference Include="Microsoft.Agents.AI" Version="1.0.0-preview.251001.2" />
+    <PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.0.0-preview.251001.2" />
+    <PackageReference Include="Microsoft.Agents.AI.Abstractions" Version="1.0.0-preview.251001.2" />
+
+    <!-- Semantic Kernel packages for agent creation -->
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.0.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.0.1" />
+
+    <!-- Azure AI and Identity packages -->
+    <PackageReference Include="Azure.AI.OpenAI" Version="1.11.2" />
+    <PackageReference Include="Azure.Identity" Version="1.12.1" />
+
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+</Project>
