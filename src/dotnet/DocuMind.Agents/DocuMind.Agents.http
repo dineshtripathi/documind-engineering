@@ -1,0 +1,6 @@
+@DocuMind.Agents_HostAddress = http://localhost:5076
+
+GET {{DocuMind.Agents_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

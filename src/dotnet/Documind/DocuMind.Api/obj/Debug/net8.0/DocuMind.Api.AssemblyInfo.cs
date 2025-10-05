@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DocuMind.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad1e776647e017150e00feb1b833375ac8c428f1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c4c6c9f2c634533dd25e15c0808acf4c9d8176f")]
 [assembly: System.Reflection.AssemblyProductAttribute("DocuMind.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DocuMind.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

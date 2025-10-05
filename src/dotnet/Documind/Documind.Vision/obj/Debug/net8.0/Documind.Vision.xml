@@ -52,15 +52,14 @@
             <response code="400">Invalid request parameters</response>
             <response code="500">Internal server error during analysis</response>
         </member>
-        <member name="M:Documind.Vision.Controllers.VisionController.AnalyzeFile(Microsoft.AspNetCore.Http.IFormFile,System.String,System.Threading.CancellationToken)">
+        <member name="M:Documind.Vision.Controllers.VisionController.AnalyzeFile(Documind.Vision.Models.FileUploadRequest,System.Threading.CancellationToken)">
             <summary>
             Analyzes an uploaded image or PDF file using Azure AI Vision for OCR and content extraction
             </summary>
-            <param name="file">The image or PDF file to analyze (max 25MB)</param>
-            <param name="language">Optional language code for OCR (e.g., 'en', 'es', 'fr')</param>
+            <param name="request">The file upload request containing file and optional language parameter</param>
             <param name="ct">Cancellation token</param>
-            <returns>Extracted text blocks, captions, and metadata from the uploaded file</returns>
-            <response code="200">File analysis completed successfully</response>
+            <returns>Extracted text blocks, captions, and metadata from the file</returns>
+            <response code="200">Analysis completed successfully</response>
             <response code="400">Invalid file or missing file</response>
             <response code="500">Internal server error during file analysis</response>
         </member>
@@ -70,6 +69,26 @@
             </summary>
             <returns>Basic service health information</returns>
             <response code="200">Service is running</response>
+        </member>
+        <member name="T:Documind.Vision.Filters.FileUploadOperationFilter">
+            <summary>
+            Operation filter to properly handle file upload endpoints in Swagger documentation
+            </summary>
+        </member>
+        <member name="T:Documind.Vision.Models.FileUploadRequest">
+            <summary>
+            Model for file upload requests
+            </summary>
+        </member>
+        <member name="P:Documind.Vision.Models.FileUploadRequest.File">
+            <summary>
+            The file to analyze
+            </summary>
+        </member>
+        <member name="P:Documind.Vision.Models.FileUploadRequest.Language">
+            <summary>
+            Optional language hint for OCR processing
+            </summary>
         </member>
         <member name="T:Documind.Vision.Models.HealthResponse">
             <summary>
@@ -144,6 +163,11 @@
         <member name="M:Documind.Vision.Services.IVisionService.AnalyzeFileAsync(System.IO.Stream,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Analyze an uploaded image file and extract text
+            </summary>
+        </member>
+        <member name="M:Documind.Vision.Services.IVisionService.AnalyzeBytesAsync(System.String,System.String,System.IO.Stream,System.String[],System.String,System.Threading.CancellationToken)">
+            <summary>
+            Analyzes a raw image or PDF stream using Azure AI Vision.
             </summary>
         </member>
         <member name="T:Documind.Vision.Services.VisionService">
