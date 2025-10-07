@@ -6,7 +6,7 @@ using DocuMind.Api.Options;
 using DocuMind.Api.Orchestration;
 using DocuMind.Api.Services;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+// using Swashbuckle.AspNetCore.SwaggerGen;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -19,21 +19,10 @@ builder.Services.Configure<OllamaOptions>(builder.Configuration.GetSection("Olla
 builder.Services.Configure<VisionOptions>(builder.Configuration.GetSection("VisionSettings"));
 builder.Services.Configure<AzureVisionOptions>(builder.Configuration.GetSection("AzureVision"));
 
-// Controllers + Swagger
+// Controllers + API
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SupportNonNullableReferenceTypes();
-    // c.OperationFilter<FileUploadOperationFilter>();
-
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "DocuMind API",
-        Version = "v1",
-        Description = "Document intelligence and vision processing API"
-    });
-});
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen(); // Temporarily disabled for .NET 10 compatibility
 
 // Polly retry for HTTP
 var retryPolicy = HttpPolicyExtensions
@@ -90,8 +79,8 @@ var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+// app.UseSwagger();  // Temporarily disabled for .NET 10 compatibility
+// app.UseSwaggerUI();
 
 app.MapControllers();
 app.MapGet("/healthz", () => Results.Ok(new { ok = true, ts = DateTimeOffset.UtcNow }));

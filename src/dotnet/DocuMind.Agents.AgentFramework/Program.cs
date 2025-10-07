@@ -1,7 +1,7 @@
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.SemanticKernel;
-using Microsoft.OpenApi.Models;
+// using Microsoft.OpenApi.Models;
 using DocuMind.Agents.AgentFramework.Services;
 using DocuMind.Agents.AgentFramework.Options;
 
@@ -11,29 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configure Swagger
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "DocuMind Agents API - Agent Framework",
-        Version = "v1.0",
-        Description = "AI Agent Orchestration API using Microsoft Agent Framework - Educational comparison with Semantic Kernel approach",
-        Contact = new OpenApiContact
-        {
-            Name = "DocuMind Engineering",
-            Email = "engineering@documind.com"
-        }
-    });
-
-    // Include XML comments for better API documentation
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
-});
+// Configure Swagger - Simplified for .NET 10 compatibility
+builder.Services.AddSwaggerGen();
 
 // Configure Agent Framework options
 builder.Services.Configure<AgentFrameworkOptions>(

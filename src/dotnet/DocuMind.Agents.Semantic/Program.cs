@@ -2,46 +2,16 @@ using DocuMind.Agents.Interfaces;
 using DocuMind.Agents.Options;
 using DocuMind.Agents.Services;
 using Microsoft.SemanticKernel;
-using Microsoft.OpenApi.Models;
+// using Microsoft.OpenApi.Models; // Temporarily disabled for .NET 10 compatibility
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddEndpointsApiExplorer(); // Temporarily disabled for .NET 10 compatibility
 
-// Configure Swagger
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "DocuMind Agents API",
-        Version = "v1.0",
-        Description = "AI Agent Orchestration API for DocuMind - Multi-agent system for document intelligence, vision processing, and search operations",
-        Contact = new OpenApiContact
-        {
-            Name = "DocuMind Engineering",
-            Email = "engineering@documind.com"
-        }
-    });
-
-    // Include XML comments for better API documentation
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
-
-    // Add security definition for future API key authentication
-    options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
-    {
-        Description = "API Key needed to access the endpoints",
-        In = ParameterLocation.Header,
-        Name = "X-API-Key",
-        Type = SecuritySchemeType.ApiKey
-    });
-});
+// Configure Swagger - Temporarily disabled for .NET 10 compatibility
+// builder.Services.AddSwaggerGen();
 
 // Configure Agent options
 builder.Services.Configure<AgentOptions>(
@@ -118,15 +88,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "DocuMind Agents API v1.0");
-        options.RoutePrefix = "swagger";
-        options.DisplayRequestDuration();
-        options.EnableTryItOutByDefault();
-        options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
-    });
+    // app.UseSwagger(); // Temporarily disabled for .NET 10 compatibility
+    // app.UseSwaggerUI(); // Temporarily disabled for .NET 10 compatibility
 }
 
 app.UseRouting();

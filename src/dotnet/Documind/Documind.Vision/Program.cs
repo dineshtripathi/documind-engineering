@@ -11,37 +11,8 @@ builder.Services.Configure<AzureVisionOptions>(builder.Configuration.GetSection(
 
 // Add services to the container
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new()
-    {
-        Title = "Documind Vision API",
-        Version = AppConstants.ApiVersion,
-        Description = "Document vision processing and OCR services using Azure AI Vision",
-        Contact = new()
-        {
-            Name = "Documind Team",
-            Email = "support@documind.ai"
-        },
-        License = new()
-        {
-            Name = "MIT License",
-            Url = new Uri("https://opensource.org/licenses/MIT")
-        }
-    });
-
-    // Include XML comments if available
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        c.IncludeXmlComments(xmlPath);
-    }
-
-    // Support for file uploads
-    // c.OperationFilter<FileUploadOperationFilter>();
-});
+// builder.Services.AddEndpointsApiExplorer(); // Temporarily disabled for .NET 10 compatibility
+// builder.Services.AddSwaggerGen(); // Temporarily disabled for .NET 10 compatibility
 
 // Register vision services
 builder.Services.AddHttpClient<AzureVisionClient>();
@@ -61,8 +32,8 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-app.UseSwagger();
-app.UseSwaggerUI();
+// app.UseSwagger(); // Temporarily disabled for .NET 10 compatibility
+// app.UseSwaggerUI(); // Temporarily disabled for .NET 10 compatibility
 
 app.UseHttpsRedirection();
 app.UseCors();

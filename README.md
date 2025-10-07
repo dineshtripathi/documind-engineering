@@ -45,25 +45,60 @@
 | **Documind.Vision** | 7002 | Azure AI Vision integration | ✅ Operational |
 | **Semantic Kernel** | 5076 | Educational AI workflows | ✅ Ready |
 | **Agent Framework** | 8082 | Next-gen agent orchestration | ✅ Operational |
+| **🆕 MCP Server** | 9090 | .NET 10 Model Context Protocol | 🚀 New! |
 | **Legacy Agents** | 8081 | Original agent service | ✅ Running |
 | **Python RAG API** | 7001 | AI processing engine | ✅ CUDA Enabled |
 | **Qdrant Vector DB** | 6333 | Vector storage | ✅ Memory Mode |
+
+## 🆕 .NET 10 with Model Context Protocol (MCP)
+
+### 🎯 MCP Framework Integration
+Microsoft has integrated the **Model Context Protocol (MCP)** natively into .NET 10, providing a standardized way for AI applications to interact with external tools, resources, and data sources.
+
+**🔥 Key Features:**
+- **Native MCP Support**: Built directly into .NET 10 framework
+- **Tool Execution**: Dynamic registration and execution of AI tools
+- **Resource Management**: Secure access to external data sources
+- **Prompt Templates**: Advanced template system for AI interactions
+- **Integration**: Seamless integration with Semantic Kernel and Agent Framework
+
+**🚀 MCP Service (Port 9090):**
+```bash
+# Start .NET 10 services with MCP
+bash scripts/start-dotnet10-mcp.sh
+
+# Test MCP capabilities
+curl -X POST http://localhost:9090/mcp/tools/document_analysis \
+  -H "Content-Type: application/json" \
+  -d '{"content": "Sample text", "analysis_type": "summary"}'
+```
+
+### 📊 Enhanced Services with MCP
+
+| Framework | MCP Integration | Capabilities |
+|-----------|----------------|--------------|
+| **Semantic Kernel** | ✅ Enhanced | SK plugins → MCP tools |
+| **Agent Framework** | ✅ Native | Multi-agent MCP coordination |
+| **Vision Service** | ✅ Enabled | Image processing via MCP |
+| **Main API** | ✅ Orchestration | MCP-aware request routing |
 
 ## Technology Stack
 ## 🛠️ Technology Stack
 
 ### 🔧 Backend Services
-- **.NET 8 / ASP.NET Core**: Main orchestration with Swagger documentation
+- **🆕 .NET 10 / ASP.NET Core**: Enhanced with native MCP framework support
+- **.NET 8 / ASP.NET Core**: Main orchestration with Swagger documentation (Legacy)
 - **Python 3.11 / FastAPI**: RAG processing and AI model inference
 - **Docker**: Containerized services and vector database
 
 ### 🤖 AI & ML Stack
+- **🆕 Model Context Protocol**: Native .NET 10 framework for AI tool integration
 - **Local LLM**: Ollama Phi-3.5 3.8B (CUDA acceleration)
 - **Cloud LLM**: Azure OpenAI GPT-4o-mini
 - **Embeddings**: BAAI/bge-m3 (1024-dimensional vectors)
 - **Reranking**: Jina reranker v1-turbo-en (cross-encoder)
 - **Vision**: Azure AI Vision for OCR and image analysis
-- **Frameworks**: Microsoft Semantic Kernel + Agent Framework
+- **Frameworks**: Microsoft Semantic Kernel + Agent Framework (both MCP-enhanced)
 
 ### 📊 Database & Storage
 - **Vector Database**: Qdrant (cosine similarity, persistent storage)
@@ -78,13 +113,15 @@
 - Ubuntu 20.04+ / Windows 11 with WSL2
 - NVIDIA GPU with CUDA 12.1+ (for local AI)
 - Docker & Docker Compose
-- .NET 8 SDK
+- **🆕 .NET 10 SDK** (for MCP framework support)
+- .NET 8 SDK (fallback compatibility)
 - Python 3.10+
 
-**Verify CUDA Support:**
+**Verify CUDA & .NET Support:**
 ```bash
 nvidia-smi  # Should show GPU details
 nvcc --version  # CUDA compiler version
+dotnet --version  # Should be 10.x.x for full MCP support
 ```
 
 ### ⚡ One-Line Setup
