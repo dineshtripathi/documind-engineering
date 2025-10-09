@@ -123,3 +123,10 @@ data/qdrant/
 
 # Azure Functions
 local.settings.json
+# Exclude sensitive files
+docker/data/ollama/id_*
+*.key
+*.pem
+*.pid
+__pycache__/
+*.pyc

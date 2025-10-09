@@ -13,12 +13,12 @@ from qdrant_client.http.models import Distance, VectorParams, PointStruct
 # ------------ Config ------------
 @dataclass(frozen=True)
 class RagConfig:
-    # Qdrant: allow memory mode for local dev; or server via URL
-    qdrant_mode: str = os.getenv("QDRANT_MODE", "memory")  # "memory" | "server"
+    # Qdrant: Production server with persistence
+    qdrant_mode: str = os.getenv("QDRANT_MODE", "server")  # "memory" | "server"
     qdrant_url: str = os.getenv("QDRANT_URL", "http://127.0.0.1:6333")
     qdrant_retries: int = int(os.getenv("QDRANT_RETRIES", "10"))
-    qdrant_retry_delay: float = float(os.getenv("QDRANT_RETRY_DELAY", "0.5"))
-    collection: str = os.getenv("QDRANT_COLLECTION", "smoketest_docs")
+    qdrant_retry_delay: float = float(os.getenv("QDRANT_RETRY_DELAY", "1.0"))
+    collection: str = os.getenv("QDRANT_COLLECTION", "tech_knowledge_base")
 
     # Models
     embed_model: str = os.getenv("EMBED_MODEL", "BAAI/bge-m3")
@@ -33,7 +33,16 @@ class RagConfig:
     ollama_url: str = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "phi3.5:3.8b-mini-instruct-q4_0")
 
+    # Specialized models for different tasks
+    code_generation_model: str = os.getenv("CODE_MODEL", "codellama:13b")
+    code_explanation_model: str = os.getenv("CODE_EXPLAIN_MODEL", "codellama:13b")
+    general_chat_model: str = os.getenv("CHAT_MODEL", "llama3.1:8b")
+    technical_model: str = os.getenv("TECH_MODEL", "llama3.1:70b")
 
+    # Domain-specific configuration
+    enable_domain_detection: bool = bool(os.getenv("ENABLE_DOMAIN_DETECTION", "true"))
+    min_confidence_threshold: float = float(os.getenv("MIN_CONFIDENCE", "0.7"))
+    domain_models: Dict[str, str] | None = None  # Populated dynamically
 # ------------ Core ------------
 class RagCore:
     def __init__(self, cfg: RagConfig | None = None) -> None:
@@ -73,6 +82,34 @@ class RagCore:
         # Optional tiny seed corpus (kept for parity with your old code)
         self._seed_once()
 
+        # Domain detection setup
+        self.domain_keywords = {
+            "finance": ["loan", "mortgage", "investment", "portfolio", "risk", "compliance", "financial", "banking", "credit", "debt", "fico", "basel", "securities", "fund", "trading"],
+            "legal": ["contract", "agreement", "liability", "clause", "jurisdiction", "lawsuit", "legal", "court", "attorney", "law", "litigation", "statute", "regulation", "breach", "defendant"],
+            "medical": ["patient", "diagnosis", "treatment", "medication", "symptoms", "medical", "health", "doctor", "hospital", "clinical", "therapy", "prescription", "vital", "cardiac", "ecg", "oxygen"],
+            "technical": [
+                # .NET & Programming
+                "API", "configuration", "deployment", "architecture", "protocol", "system", "software", "code", "programming", "technical",
+                "server", "database", "network", "framework", "algorithm", ".net", "dotnet", "csharp", "async", "await", "task",
+                "dependency", "injection", "minimal", "controllers", "middleware", "hosting", "services", "entity",
+                # Azure & Cloud
+                "azure", "functions", "durable", "orchestrator", "activity", "checkpointing", "retry", "workflow", "cosmos",
+                "storage", "servicebus", "eventhub", "cognitive", "kubernetes", "docker", "container", "microservices",
+                # DevOps & IaC
+                "terraform", "yaml", "pipeline", "ci/cd", "devops", "infrastructure", "provisioning", "automation",
+                "bicep", "arm", "cloudformation", "ansible", "helm", "kubectl", "deployment", "scaling",
+                # Modern Tech
+                "microservice", "distributed", "event-driven", "saga", "cqrs", "event-sourcing", "domain-driven",
+                "observability", "monitoring", "logging", "tracing", "metrics", "telemetry", "security", "authentication"
+            ],
+            "education": ["student", "course", "curriculum", "academic", "education", "learning", "teaching", "university", "school", "grade", "assessment", "instruction", "pedagogy", "enrollment", "degree"],
+            "general": []  # Fallback
+        }
+
+        # Initialize model availability cache
+        self._available_models = None
+        self._check_model_availability()
+
     # ---------- Public API ----------
     def health(self) -> Dict:
         return {
@@ -83,7 +120,16 @@ class RagCore:
             "collection": self.cfg.collection,
             "embed_model": self.cfg.embed_model,
             "rerank_model": self.cfg.rerank_model,
-            "ollama_model": self.cfg.ollama_model,
+            "default_ollama_model": self.cfg.ollama_model,
+            "specialized_models": {
+                "code_generation": self.cfg.code_generation_model,
+                "code_explanation": self.cfg.code_explanation_model,
+                "general_chat": self.cfg.general_chat_model,
+                "technical": self.cfg.technical_model
+            },
+            "available_models": self._available_models or [],
+            "domain_detection": self.cfg.enable_domain_detection,
+            "supported_domains": list(self.domain_keywords.keys()),
         }
 
     def ingest_text(self, doc_id: str, text: str) -> int:
@@ -179,6 +225,96 @@ class RagCore:
         if ans and ans.lower() != "not found" and self._has_valid_citations(ans, self.cfg.context_k):
             return {"route": "local", "answer": ans, "contextMap": cmap}
         return {"route": "abstain", "answer": "not found", "contextMap": cmap}
+
+    # ---------- Domain Detection ----------
+    def detect_domain(self, text: str) -> Tuple[str, float]:
+        """Detect document domain based on keyword analysis and confidence scoring."""
+        text_lower = text.lower()
+        word_count = len(text.split())
+
+        domain_scores = {}
+        for domain, keywords in self.domain_keywords.items():
+            if domain == "general":
+                continue
+
+            # Count keyword matches
+            keyword_matches = sum(1 for keyword in keywords if keyword in text_lower)
+
+            # Calculate normalized score with improved algorithm
+            if keywords and keyword_matches > 0:
+                # Use absolute match count with normalization for large keyword sets
+                base_score = min(1.0, keyword_matches / max(10, len(keywords) * 0.3))  # More forgiving for large sets
+                # Apply density boost for shorter texts
+                density_boost = min(2.0, keyword_matches / max(1, word_count / 100))
+                domain_scores[domain] = base_score * (1 + density_boost * 0.2)  # Increased boost
+            else:
+                domain_scores[domain] = 0.0
+
+        # Find best domain
+        if domain_scores:
+            best_domain = max(domain_scores.items(), key=lambda x: x[1])
+            domain, confidence = best_domain
+
+            # Lower confidence threshold for better detection
+            if confidence >= max(0.1, self.cfg.min_confidence_threshold * 0.3):  # Much more lenient
+                return domain, confidence
+
+        # Fallback to general
+        return "general", 1.0
+
+    def select_model_for_task(self, task_type: str, domain: str = "general", query: str = "") -> str:
+        """Select the best model for a specific task and domain."""
+        # Code-related tasks
+        if task_type == "code_generation":
+            return self._get_available_model(self.cfg.code_generation_model)
+        elif task_type == "code_explanation":
+            return self._get_available_model(self.cfg.code_explanation_model)
+        elif task_type == "technical" or domain == "technical":
+            return self._get_available_model(self.cfg.technical_model)
+
+        # Check if query contains code-related keywords
+        code_keywords = ["code", "programming", "function", "class", "method", "api", "algorithm", "debug"]
+        if any(keyword in query.lower() for keyword in code_keywords):
+            return self._get_available_model(self.cfg.technical_model)
+
+        # Default to general chat model
+        return self._get_available_model(self.cfg.general_chat_model)
+
+    def ask_local_with_model_selection(self, query: str, task_type: str = "general") -> Dict:
+        """Enhanced ask_local with automatic model selection."""
+        # Detect domain for better model selection
+        domain, confidence = self.detect_domain(query)
+
+        # Select appropriate model
+        selected_model = self.select_model_for_task(task_type, domain, query)
+
+        # Retrieve and rank context
+        hits = self.search(query, k=self.cfg.topk)
+        ranked, scores = self.rerank(query, hits)
+        prompt, cmap = self.build_prompt(query, ranked, k=self.cfg.context_k)
+
+        # Generate with selected model
+        ans = self._ollama_generate_with_model(prompt, selected_model, temperature=0.1).strip()
+
+        if ans and ans.lower() != "not found" and self._has_valid_citations(ans, self.cfg.context_k):
+            return {
+                "route": "local",
+                "answer": ans,
+                "contextMap": cmap,
+                "model_used": selected_model,
+                "detected_domain": domain,
+                "domain_confidence": confidence,
+                "task_type": task_type
+            }
+        return {
+            "route": "abstain",
+            "answer": "not found",
+            "contextMap": cmap,
+            "model_used": selected_model,
+            "detected_domain": domain,
+            "domain_confidence": confidence,
+            "task_type": task_type
+        }
 
     # ---------- Helpers ----------
     def chunk_text(self, text: str, max_tokens: int = 220, overlap_tokens: int = 40) -> List[str]:
@@ -280,6 +416,71 @@ class RagCore:
             except Exception:
                 return False
         return True
+
+    def _check_model_availability(self) -> None:
+        """Check which Ollama models are available."""
+        try:
+            response = requests.get(f"{self.cfg.ollama_url}/api/tags", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                self._available_models = [model["name"] for model in data.get("models", [])]
+            else:
+                self._available_models = []
+        except Exception:
+            self._available_models = []
+
+    def _get_available_model(self, preferred_model: str) -> str:
+        """Get available model, fallback to default if preferred not available."""
+        if self._available_models is None:
+            self._check_model_availability()
+
+        available_models = self._available_models or []
+
+        if preferred_model in available_models:
+            return preferred_model
+
+        # Fallback hierarchy
+        fallbacks = [
+            self.cfg.ollama_model,  # Default model
+            "llama3.1:70b",         # Most powerful general model
+            "llama3.1:8b",          # Good general model
+            "mixtral:8x7b-instruct-v0.1-q4_0",  # Excellent instruction following
+            "codellama:13b",        # Code specialization
+            "phi3.5:3.8b-mini-instruct-q4_0"    # Fallback
+        ]
+
+        for fallback in fallbacks:
+            if fallback in available_models:
+                return fallback
+
+        # Last resort - return the preferred model (Ollama will handle the error)
+        return preferred_model
+
+    def _ollama_generate_with_model(self, prompt: str, model: str, temperature: float = 0.2) -> str:
+        """Generate with a specific model."""
+        # try /api/generate
+        try:
+            r = requests.post(
+                f"{self.cfg.ollama_url}/api/generate",
+                json={"model": model, "prompt": prompt, "stream": False, "options": {"temperature": temperature}},
+                timeout=180
+            )
+            if r.status_code == 200:
+                return r.json().get("response", "") or ""
+        except Exception:
+            pass
+        # fallback to /api/chat
+        try:
+            c = requests.post(
+                f"{self.cfg.ollama_url}/api/chat",
+                json={"model": model, "stream": False, "messages": [{"role": "user", "content": prompt}], "options": {"temperature": temperature}},
+                timeout=180
+            )
+            c.raise_for_status()
+            j = c.json()
+            return j.get("message", {}).get("content", "") or ""
+        except Exception:
+            return ""
 
     def _seed_once(self) -> None:
         # Idempotent tiny seed corpus from your original file (kept here for parity)

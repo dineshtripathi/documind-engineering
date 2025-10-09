@@ -1,12 +1,17 @@
-### Documind Vision API Test File
+### Documind Vision API Test File - Enhanced with RAG Integration
 ### Base URL for local development
 @baseUrl = https://localhost:7002
+@ragApiUrl = http://localhost:7001
 
 ### Variables for testing
 @testImageUrl = https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Document_with_text.jpg/800px-Document_with_text.jpg
+@technicalDiagramUrl = https://docs.microsoft.com/en-us/azure/architecture/diagrams/example-architecture.png
+@codeScreenshotUrl = https://raw.githubusercontent.com/microsoft/vscode/main/resources/linux/code.png
 @language = en
 
-###
+###########################################################
+### HEALTH & STATUS CHECKS
+###########################################################
 
 ### Health Check - Detailed
 GET {{baseUrl}}/vision/healthz
@@ -20,7 +25,46 @@ Accept: application/json
 
 ###
 
-### Analyze Image from URL
+### Vision + RAG System Status
+GET {{ragApiUrl}}/healthz
+Accept: application/json
+
+###########################################################
+### DOCUMENT ANALYSIS WITH RAG INTEGRATION
+###########################################################
+
+### Analyze Technical Document and Ingest to RAG
+POST {{baseUrl}}/vision/analyze-and-ingest
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{technicalDiagramUrl}}",
+  "language": "{{language}}",
+  "features": ["Read", "Caption", "Tags"],
+  "docId": "technical-diagram-001",
+  "domainHint": "technical",
+  "ingestToRag": true
+}
+
+###
+
+### Analyze Code Screenshot with Enhanced OCR
+POST {{baseUrl}}/vision/analyze
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{codeScreenshotUrl}}",
+  "language": "en",
+  "features": ["Read"],
+  "extractionMode": "code",
+  "enhanceCodeExtraction": true
+}
+
+###
+
+### Analyze Image from URL - Standard
 POST {{baseUrl}}/vision/analyze
 Content-Type: application/json
 Accept: application/json
@@ -44,7 +88,7 @@ Accept: application/json
 
 ###
 
-### Analyze Image from URL - Only OCR
+### Analyze Image from URL - Only OCR with Domain Context
 POST {{baseUrl}}/vision/analyze
 Content-Type: application/json
 Accept: application/json
@@ -52,8 +96,24 @@ Accept: application/json
 {
   "url": "{{testImageUrl}}",
   "language": "en",
-  "features": ["Read"]
+  "features": ["Read"],
+  "contextHint": "financial_document"
 }
+
+###########################################################
+### FILE UPLOAD WITH RAG INTEGRATION
+###########################################################
+
+### Upload and Analyze File with RAG Ingestion
+POST {{baseUrl}}/vision/analyze-file-and-ingest?language={{language}}&docId=uploaded-doc-001&domainHint=technical
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test-document.jpg"
+Content-Type: image/jpeg
+
+< /path/to/your/test-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
 
@@ -70,7 +130,7 @@ Content-Type: image/jpeg
 
 ###
 
-### Upload and Analyze File - No Language
+### Upload PDF Document with OCR
 POST {{baseUrl}}/vision/analyze-file
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
@@ -82,6 +142,86 @@ Content-Type: application/pdf
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
+
+### Batch Upload Multiple Files
+POST {{baseUrl}}/vision/analyze-batch
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="files"; filename="doc1.jpg"
+Content-Type: image/jpeg
+
+< /path/to/your/doc1.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="files"; filename="doc2.pdf"
+Content-Type: application/pdf
+
+< /path/to/your/doc2.pdf
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="batchId"
+
+batch-vision-001
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###########################################################
+### ADVANCED VISION FEATURES
+###########################################################
+
+### Extract Tables from Document
+POST {{baseUrl}}/vision/extract-tables
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}",
+  "language": "en",
+  "outputFormat": "json"
+}
+
+###
+
+### Extract Forms and Fields
+POST {{baseUrl}}/vision/extract-forms
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}",
+  "language": "en",
+  "extractFields": ["name", "date", "amount", "signature"]
+}
+
+###
+
+### Analyze Layout and Structure
+POST {{baseUrl}}/vision/analyze-layout
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}",
+  "includeWordCoordinates": true,
+  "detectTables": true,
+  "detectParagraphs": true
+}
+
+###
+
+### Extract and Query Document with RAG
+POST {{baseUrl}}/vision/extract-and-query
+Content-Type: application/json
+Accept: application/json
+
+{
+  "url": "{{testImageUrl}}",
+  "query": "What is the total amount mentioned in this document?",
+  "language": "en",
+  "useRagContext": true
+}
+
+###########################################################
+### ERROR HANDLING & VALIDATION
+###########################################################
 
 ### Error Test - Missing URL
 POST {{baseUrl}}/vision/analyze

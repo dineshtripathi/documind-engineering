@@ -28,14 +28,51 @@ def build_prompt(req: BuildPromptReq):
 
 class AskRequest(BaseModel):
     q: str
+    task_type: str = "general"  # general, code_generation, code_explanation, technical
+
+class EnhancedAskRequest(BaseModel):
+    q: str
+    task_type: str = "general"
+    preferred_model: str | None = None
 
 @router.get("/ask")
-def ask_get(q: str = Query(...)):
-    return core.ask_local(q)
+def ask_get(q: str = Query(...), task_type: str = Query("general")):
+    """Simple ask endpoint with optional task type for model selection."""
+    return core.ask_local_with_model_selection(q, task_type)
 
 @router.post("/ask")
 def ask_post(payload: AskRequest = Body(...)):
-    return core.ask_local(payload.q)
+    """Enhanced ask endpoint with model selection based on task type."""
+    return core.ask_local_with_model_selection(payload.q, payload.task_type)
+
+@router.post("/ask/enhanced")
+def ask_enhanced(payload: EnhancedAskRequest = Body(...)):
+    """Advanced ask endpoint with explicit model control."""
+    if payload.preferred_model:
+        # Use specific model if requested
+        hits = core.search(payload.q, k=core.cfg.topk)
+        ranked, scores = core.rerank(payload.q, hits)
+        prompt, cmap = core.build_prompt(payload.q, ranked, k=core.cfg.context_k)
+        ans = core._ollama_generate_with_model(prompt, payload.preferred_model, temperature=0.1).strip()
+
+        if ans and ans.lower() != "not found" and core._has_valid_citations(ans, core.cfg.context_k):
+            return {
+                "route": "local",
+                "answer": ans,
+                "contextMap": cmap,
+                "model_used": payload.preferred_model,
+                "task_type": payload.task_type
+            }
+        return {
+            "route": "abstain",
+            "answer": "not found",
+            "contextMap": cmap,
+            "model_used": payload.preferred_model,
+            "task_type": payload.task_type
+        }
+    else:
+        # Use automatic model selection
+        return core.ask_local_with_model_selection(payload.q, payload.task_type)
 
 @router.get("/rag/search")
 def rag_search(q: str, k: int = 8):

@@ -11,12 +11,179 @@ GET {{RAG_Api_HostAddress}}/healthz
 Accept: application/json
 
 ###########################################################
-### ENHANCED ASK ORCHESTRATOR TESTS
+### WEB CRAWLING & CONTENT INGESTION
 ###########################################################
 
-### Simple Query (Expected: Local Route)
+### Start Web Crawl Job
+POST {{RAG_Api_HostAddress}}/crawler/crawl
+Content-Type: application/json
+
+{
+  "urls": [
+    "https://docs.microsoft.com/en-us/dotnet/core/",
+    "https://docs.microsoft.com/en-us/aspnet/core/"
+  ],
+  "max_pages": 10,
+  "delay_seconds": 1.0,
+  "domain_hint": "technical"
+}
+
+###
+
+### Start Python Documentation Crawl
+POST {{RAG_Api_HostAddress}}/crawler/crawl-python-docs
+Content-Type: application/json
+
+{
+  "topics": ["asyncio", "fastapi", "pydantic"],
+  "max_pages_per_topic": 20,
+  "job_id": "python-docs-crawl-001"
+}
+
+###
+
+### Start StackOverflow Crawl
+POST {{RAG_Api_HostAddress}}/crawler/crawl-stackoverflow
+Content-Type: application/json
+
+{
+  "tags": ["python", "fastapi", "azure", "docker"],
+  "max_questions": 50,
+  "job_id": "stackoverflow-crawl-001"
+}
+
+###
+
+### Start Microsoft Docs Crawl
+POST {{RAG_Api_HostAddress}}/crawler/crawl-microsoft-docs
+Content-Type: application/json
+
+{
+  "paths": [
+    "/dotnet/core/",
+    "/azure/cognitive-services/",
+    "/azure/app-service/"
+  ],
+  "max_pages": 30,
+  "job_id": "microsoft-docs-crawl-001"
+}
+
+###
+
+### Get Crawl Job Status
+GET {{RAG_Api_HostAddress}}/crawler/status/python-docs-crawl-001
+Accept: application/json
+
+###
+
+### List All Crawl Jobs
+GET {{RAG_Api_HostAddress}}/crawler/jobs
+Accept: application/json
+
+###
+
+### Cancel Crawl Job
+DELETE {{RAG_Api_HostAddress}}/crawler/jobs/python-docs-crawl-001
+Accept: application/json
+
+###
+
+### Crawl GitHub Repository
+POST {{RAG_Api_HostAddress}}/crawler/crawl-github
+Content-Type: application/json
+
+{
+  "repository": "microsoft/FastAPI-on-Azure",
+  "paths": ["docs/", "README.md", "examples/"],
+  "max_files": 50,
+  "job_id": "github-crawl-001"
+}
+
+###
+
+### Crawl Azure Documentation
+POST {{RAG_Api_HostAddress}}/crawler/crawl-azure-docs
+Content-Type: application/json
+
+{
+  "services": ["app-service", "cognitive-services", "functions"],
+  "max_pages_per_service": 25,
+  "job_id": "azure-docs-crawl-001"
+}
+
+###
+
+### Custom Domain Crawl
+POST {{RAG_Api_HostAddress}}/crawler/crawl
+Content-Type: application/json
+
+{
+  "urls": [
+    "https://pytorch.org/docs/stable/",
+    "https://huggingface.co/docs/"
+  ],
+  "max_pages": 15,
+  "delay_seconds": 2.0,
+  "domain_hint": "technical",
+  "job_id": "ai-frameworks-crawl-001"
+}
+
+###
+
+###########################################################
+### ENHANCED ASK ORCHESTRATOR WITH MODEL SELECTION TESTS
+###########################################################
+
+### Simple Query with Model Selection (Expected: phi3.5 model)
 GET {{DocuMind.Api_HostAddress}}/ask?q=What is the company name?
 Accept: application/json
+
+###
+
+### Code Generation Query (Expected: CodeLlama/DeepSeek model)
+POST {{RAG_Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Write a Python function to validate email addresses using regex",
+  "task_type": "code_generation"
+}
+
+###
+
+### Code Explanation Query (Expected: CodeQwen model)
+POST {{RAG_Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Explain how this async function works: async def fetch_data(url): return await httpx.get(url)",
+  "task_type": "code_explanation"
+}
+
+###
+
+### Technical Documentation Query (Expected: DeepSeek/Technical model)
+POST {{RAG_Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "How do I configure Kubernetes deployment for high availability and what are the best practices for container orchestration?",
+  "task_type": "technical"
+}
+
+###
+
+### Enhanced Ask with Preferred Model
+POST {{RAG_Api_HostAddress}}/ask-enhanced
+Content-Type: application/json
+
+{
+  "query": "Debug this API endpoint and suggest improvements",
+  "task_type": "code_generation",
+  "preferred_model": "deepseek-coder:6.7b",
+  "max_tokens": 1000,
+  "temperature": 0.1
+}
 
 ###
 
@@ -156,27 +323,58 @@ uploaded-test-001
 --boundary123--
 
 ###########################################################
-### DIRECT PYTHON RAG API TESTS
+### DIRECT PYTHON RAG API TESTS WITH CRAWLING
 ###########################################################
 
-### Python RAG - Health Check
+### Python RAG - Health Check with Model Info
 GET {{RAG_Api_HostAddress}}/healthz
 Accept: application/json
 
 ###
 
-### Python RAG - Direct Ask
-GET {{RAG_Api_HostAddress}}/ask?q=What is the backup retention policy?
-Accept: application/json
-
-###
-
-### Python RAG - Ask via POST
+### Python RAG - Ask with Automatic Model Selection
 POST {{RAG_Api_HostAddress}}/ask
 Content-Type: application/json
 
 {
-  "q": "How often are backups performed?"
+  "q": "How often are backups performed?",
+  "task_type": "general"
+}
+
+###
+
+### Python RAG - Ask for Code Generation
+POST {{RAG_Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Create a FastAPI endpoint for file upload with validation",
+  "task_type": "code_generation"
+}
+
+###
+
+### Python RAG - Ask for Code Explanation
+POST {{RAG_Api_HostAddress}}/ask
+Content-Type: application/json
+
+{
+  "q": "Explain how dependency injection works in .NET Core",
+  "task_type": "code_explanation"
+}
+
+###
+
+### Python RAG - Enhanced Ask with Model Selection
+POST {{RAG_Api_HostAddress}}/ask-enhanced
+Content-Type: application/json
+
+{
+  "query": "Optimize this database query for better performance",
+  "task_type": "technical",
+  "preferred_model": "deepseek-coder:6.7b",
+  "max_tokens": 1500,
+  "temperature": 0.2
 }
 
 ###
@@ -191,19 +389,20 @@ Content-Type: application/json
 
 ###
 
-### Python RAG - Search Documents
-GET {{RAG_Api_HostAddress}}/rag/search?q=backup schedule&k=5
+### Python RAG - Search Documents with Domain
+GET {{RAG_Api_HostAddress}}/rag/search?q=backup schedule&k=5&domain=technical
 Accept: application/json
 
 ###
 
-### Python RAG - Ingest Text
+### Python RAG - Ingest Text with Domain Detection
 POST {{RAG_Api_HostAddress}}/ingest/text
 Content-Type: application/json
 
 {
-  "doc_id": "rag-test-001",
-  "text": "Emergency Response Protocol: In case of system failure, immediately activate the disaster recovery plan. Contact the on-call engineer and initiate failover procedures to the secondary data center within 15 minutes."
+  "doc_id": "rag-test-enhanced-001",
+  "text": "Emergency Response Protocol: In case of system failure, immediately activate the disaster recovery plan. Contact the on-call engineer and initiate failover procedures to the secondary data center within 15 minutes. Use kubectl to scale up backup pods and verify health checks.",
+  "domain_hint": "technical"
 }
 
 ###########################################################

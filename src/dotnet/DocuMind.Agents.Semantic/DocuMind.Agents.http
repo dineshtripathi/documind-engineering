@@ -1,6 +1,263 @@
-@DocuMind.Agents_HostAddress = http://localhost:5076
+### DocuMind Agents Semantic API Test File
+### Enhanced with Multi-Agent Orchestration and RAG Integration
 
+@DocuMind.Agents_HostAddress = http://localhost:5076
+@RAG_Api_HostAddress = http://localhost:7001
+@Vision_Api_HostAddress = http://localhost:7002
+
+###########################################################
+### HEALTH & STATUS CHECKS
+###########################################################
+
+### Agents API Health Check
+GET {{DocuMind.Agents_HostAddress}}/healthz
+Accept: application/json
+
+###
+
+### Weather Forecast (Legacy Endpoint)
 GET {{DocuMind.Agents_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+### System Status - All Services
+GET {{DocuMind.Agents_HostAddress}}/system/status
+Accept: application/json
+
+###########################################################
+### SEMANTIC AGENTS ORCHESTRATION
+###########################################################
+
+### Document Analysis Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/document-analyzer
+Content-Type: application/json
+
+{
+  "documentId": "technical-spec-001",
+  "analysisType": "comprehensive",
+  "includeVisionAnalysis": true,
+  "ragContext": true,
+  "extractMetadata": true
+}
+
+###
+
+### Code Review Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/code-reviewer
+Content-Type: application/json
+
+{
+  "codeSnippet": "async def process_document(file_path: str) -> Dict[str, Any]:\n    with open(file_path, 'r') as f:\n        content = f.read()\n    return {'processed': True, 'content': content}",
+  "language": "python",
+  "reviewLevel": "comprehensive",
+  "suggestImprovements": true,
+  "checkSecurity": true
+}
+
+###
+
+### Knowledge Synthesis Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/knowledge-synthesizer
+Content-Type: application/json
+
+{
+  "query": "Summarize all backup and disaster recovery procedures",
+  "sources": ["documents", "crawled_content", "vision_extracts"],
+  "synthesisLevel": "detailed",
+  "includeRecommendations": true
+}
+
+###
+
+### Multi-Modal Analysis Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/multi-modal-analyzer
+Content-Type: application/json
+
+{
+  "inputs": [
+    {
+      "type": "text",
+      "content": "Azure architecture best practices"
+    },
+    {
+      "type": "image_url",
+      "content": "https://docs.microsoft.com/architecture/example.png"
+    },
+    {
+      "type": "document_id",
+      "content": "azure-docs-001"
+    }
+  ],
+  "analysisGoal": "comprehensive_technical_review",
+  "outputFormat": "structured_report"
+}
+
+###
+
+### Workflow Orchestration Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/workflow-orchestrator
+Content-Type: application/json
+
+{
+  "workflowType": "document_processing_pipeline",
+  "steps": [
+    "vision_extraction",
+    "text_analysis",
+    "rag_ingestion",
+    "knowledge_synthesis",
+    "report_generation"
+  ],
+  "inputDocuments": ["doc1.pdf", "doc2.jpg"],
+  "outputFormat": "comprehensive_report"
+}
+
+###########################################################
+### AGENT COORDINATION & MESSAGING
+###########################################################
+
+### Agent Task Queue Status
+GET {{DocuMind.Agents_HostAddress}}/agents/queue/status
+Accept: application/json
+
+###
+
+### Start Agent Collaboration Session
+POST {{DocuMind.Agents_HostAddress}}/agents/collaboration/start
+Content-Type: application/json
+
+{
+  "sessionId": "collab-session-001",
+  "participants": [
+    "document-analyzer",
+    "code-reviewer",
+    "knowledge-synthesizer"
+  ],
+  "goal": "complete_technical_documentation_review",
+  "context": {
+    "documentIds": ["tech-spec-001", "code-samples-001"],
+    "analysisDepth": "comprehensive"
+  }
+}
+
+###
+
+### Get Agent Collaboration Results
+GET {{DocuMind.Agents_HealthAddress}}/agents/collaboration/collab-session-001/results
+Accept: application/json
+
+###
+
+### Agent Performance Metrics
+GET {{DocuMind.Agents_HostAddress}}/agents/metrics
+Accept: application/json
+
+###########################################################
+### SPECIALIZED AGENT ENDPOINTS
+###########################################################
+
+### Technical Documentation Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/tech-docs-specialist
+Content-Type: application/json
+
+{
+  "query": "Generate comprehensive API documentation for the RAG endpoints",
+  "includeExamples": true,
+  "format": "openapi_spec",
+  "enhanceWithRAG": true
+}
+
+###
+
+### Security Analysis Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/security-analyst
+Content-Type: application/json
+
+{
+  "targetSystem": "rag_api_endpoints",
+  "analysisType": "vulnerability_assessment",
+  "includeRecommendations": true,
+  "checkCompliance": ["GDPR", "HIPAA", "SOC2"]
+}
+
+###
+
+### Performance Optimization Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/performance-optimizer
+Content-Type: application/json
+
+{
+  "systemComponent": "vector_search_pipeline",
+  "currentMetrics": {
+    "latency_ms": 250,
+    "throughput_qps": 45,
+    "memory_usage_mb": 1024
+  },
+  "optimizationGoals": ["reduce_latency", "increase_throughput"],
+  "constraints": ["maintain_accuracy", "limited_memory"]
+}
+
+###
+
+### Domain Expert Agent
+POST {{DocuMind.Agents_HostAddress}}/agents/domain-expert
+Content-Type: application/json
+
+{
+  "domain": "azure_architecture",
+  "query": "Best practices for microservices deployment in Azure with high availability",
+  "expertiseLevel": "senior_architect",
+  "includeCodeExamples": true,
+  "referenceSources": true
+}
+
+###########################################################
+### AGENT INTEGRATION TESTS
+###########################################################
+
+### Test Agent-RAG Integration
+POST {{DocuMind.Agents_HostAddress}}/agents/test/rag-integration
+Content-Type: application/json
+
+{
+  "testType": "end_to_end",
+  "query": "How do I implement rate limiting in FastAPI?",
+  "expectedSources": ["crawled_docs", "ingested_content"],
+  "validateModelSelection": true
+}
+
+###
+
+### Test Agent-Vision Integration
+POST {{DocuMind.Agents_HostAddress}}/agents/test/vision-integration
+Content-Type: application/json
+
+{
+  "imageUrl": "https://example.com/architecture-diagram.png",
+  "expectedExtraction": "architecture_components",
+  "validateIngestion": true,
+  "testQueryAfterIngestion": "What are the main components in this architecture?"
+}
+
+###
+
+### Comprehensive System Test
+POST {{DocuMind.Agents_HostAddress}}/agents/test/system-comprehensive
+Content-Type: application/json
+
+{
+  "testScenario": "document_intelligence_pipeline",
+  "inputs": {
+    "text_query": "Explain microservices patterns",
+    "image_document": "technical_diagram.png",
+    "crawl_target": "https://microservices.io/patterns"
+  },
+  "expectedOutputs": [
+    "synthesized_knowledge",
+    "visual_analysis",
+    "crawled_context",
+    "comprehensive_answer"
+  ]
+}
 
 ###

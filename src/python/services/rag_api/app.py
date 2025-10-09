@@ -1,15 +1,69 @@
 # services/rag_api/app.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .core import core
 from .routers.ask import router as ask_router
 from .routers.ingest_raw import router as ingest_raw_router
 from .routers.ingest_ocr import router as ingest_ocr_router
 from .routers.index_blocks import router as index_blocks_router
+from .routers.domain_analysis import router as domain_router
+from .routers.code_generation import router as code_router
+from .routers.crawler import router as crawler_router
 
-app = FastAPI(title="DocuMind RAG API", version="0.4.0")
+app = FastAPI(
+    title="DocuMind RAG API",
+    version="0.7.0",
+    description="""
+    ## DocuMind RAG API - Intelligent Document Processing
 
-@app.get("/healthz")
+    This API provides comprehensive document intelligence capabilities with:
+
+    ### 🧠 Multi-Model AI
+    - **phi3.5** for general chat and document Q&A
+    - **DeepSeek Coder 6.7B** for technical documentation and code generation
+    - **CodeQwen 7B** for code explanation and analysis
+    - **BGE-M3** embeddings for semantic search
+    - **Jina Reranker** for result optimization
+
+    ### 🕷️ Web Crawling
+    - On-demand web content crawling
+    - Specialized crawlers for Python docs, Microsoft docs, StackOverflow
+    - Background job management with real-time status tracking
+
+    ### 🎯 Domain Intelligence
+    - Automatic domain detection (technical, finance, legal, medical, education)
+    - Task-type based model selection
+    - Context-aware response generation
+
+    ### 📄 Document Ingestion
+    - Text, file, and URL-based ingestion
+    - Automatic chunking and vectorization
+    - Multi-format support (PDF, DOCX, TXT)
+
+    ### 🔍 Advanced Search
+    - Semantic vector search with Qdrant
+    - Re-ranking for improved relevance
+    - Citation-enforced responses
+    """,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
+
+# Add CORS middleware for web UI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8501", "http://127.0.0.1:8501"],  # Streamlit default
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/healthz",
+         summary="Health Check",
+         description="Get system health status and available models",
+         tags=["System"])
 def healthz():
     return core.health()
 
@@ -18,6 +72,9 @@ app.include_router(ask_router)            # /ask, /build-prompt, /rag/search
 app.include_router(ingest_raw_router)     # /ingest/text | /ingest/file | /ingest/url
 app.include_router(ingest_ocr_router)     # /ingest/upload | /ingest/blob
 app.include_router(index_blocks_router)   # /index/blocks
+app.include_router(domain_router)         # /domain/* - Domain-aware capabilities
+app.include_router(code_router)           # /code/* - Code generation capabilities
+app.include_router(crawler_router)        # /crawler/* - Web crawling capabilities
 
 
 
