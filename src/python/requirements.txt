@@ -1,0 +1,37 @@
+# DocuMind Engineering - Hybrid AI Service Dependencies
+
+# Core FastAPI and Web Framework
+fastapi==0.119.0
+uvicorn[standard]==0.37.0
+pydantic==2.11.7
+pydantic-settings==2.6.1
+
+# HTTP and Networking
+requests==2.32.4
+aiohttp==3.13.0
+
+# Azure Services
+azure-identity==1.25.1
+azure-search-documents==11.6.0
+azure-core==1.35.1
+
+# AI and ML - Core
+openai==2.3.0
+torch==2.8.0
+transformers==4.56.2
+
+# AI and ML - Training (Optional for inference-only deployments)
+peft==0.17.1
+datasets==4.2.0
+wandb==0.22.2
+accelerate==1.10.1
+sentence-transformers==5.1.1
+
+# System and Utilities
+psutil==7.1.0
+numpy==2.3.3
+tqdm==4.67.1
+
+# Data Processing
+pandas==2.3.3
+pyarrow==21.0.0

@@ -1,3 +1,56 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# AI/ML Models and Data
+models/
+*.bin
+*.safetensors
+*.gguf
+*.pt
+*.pth
+wandb/
+mlruns/
+
+# Logs and temporary files
+*.log
+nohup.out
+.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+secrets.json
+
+# Node.js (if needed later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # .NET
 bin/
 obj/
@@ -5,8 +58,6 @@ obj/
 *.userosscache
 *.sln.docstates
 *.userprefs
-
-# Build results
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -17,6 +68,26 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+
+# Azure and Docker
+.azure/config
+docker-compose.override.yml
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Visual Studio
 .vs/
@@ -130,3 +201,7 @@ docker/data/ollama/id_*
 *.pid
 __pycache__/
 *.pyc
+
+# Documentation (keep only README.md)
+*.md
+\!README.md

@@ -1,0 +1,22 @@
+# DocuMind Engineering - Production Dependencies (Inference Only)
+
+# Core FastAPI and Web Framework
+fastapi==0.119.0
+uvicorn[standard]==0.37.0
+pydantic==2.11.7
+pydantic-settings==2.6.1
+
+# HTTP and Networking
+requests==2.32.4
+
+# Azure Services
+azure-identity==1.25.1
+azure-search-documents==11.6.0
+azure-core==1.35.1
+
+# AI and ML - Inference Only
+openai==2.3.0
+
+# System and Utilities
+psutil==7.1.0
+numpy==2.3.3
