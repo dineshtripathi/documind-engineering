@@ -1,165 +1,330 @@
-#!/bin/bash#!/bin/bash
+#!
 
-# 🏥 System Health Check & Validation
+# 🏥 System Health Check & Validation# 🏥 System Health Check & Validation
 
-# Comprehensive system validation for DocuMindecho "🧪 DocuMind Health Check..."
+# Comprehensive system validation for DocuMind# Comprehensive system validation for DocuMind
 
-echo "=========================="
 
-set -e
 
-services=(
+set -eset -e
 
-echo "🏥 DocuMind System Health Check"    "Main API:5266:http://127.0.0.1:5266/swagger"
 
-echo "==============================="    "RAG API:7001:http://127.0.0.1:7001/healthz"
 
-echo ""    "Vision API:7002:http://127.0.0.1:7002/swagger"
+echo "🏥 DocuMind System Health Check"echo "🏥 DocuMind System Health Check"
 
-    "Semantic Kernel:5076:http://127.0.0.1:5076/swagger"
+echo "==============================="
 
-# Colors for output    "Agent Framework:8082:http://127.0.0.1:8082/"
+echo ""echo "=========================="
 
-RED='\033[0;31m'    "Legacy Agents:8081:http://127.0.0.1:8081/swagger"
 
-GREEN='\033[0;32m'     "Qdrant DB:6333:http://127.0.0.1:6333/dashboard"
 
-YELLOW='\033[1;33m')
+# Colors for outputset -e
+
+RED='\033[0;31m'
+
+GREEN='\033[0;32m' services=(
+
+YELLOW='\033[1;33m'
+
+NC='\033[0m' # No Colorecho "🏥 DocuMind System Health Check"    "Main API:5266:http://127.0.0.1:5266/swagger"
+
+
+
+# Test resultsecho "==============================="    "RAG API:7001:http://127.0.0.1:7001/healthz"
+
+TESTS_PASSED=0
+
+TESTS_FAILED=0echo ""    "Vision API:7002:http://127.0.0.1:7002/swagger"
+
+
+
+# Helper functions    "Semantic Kernel:5076:http://127.0.0.1:5076/swagger"
+
+pass() {
+
+    echo -e "${GREEN}✅ $1${NC}"# Colors for output    "Agent Framework:8082:http://127.0.0.1:8082/"
+
+    ((TESTS_PASSED++))
+
+}RED='\033[0;31m'    "Legacy Agents:8081:http://127.0.0.1:8081/swagger"
+
+
+
+fail() {GREEN='\033[0;32m'     "Qdrant DB:6333:http://127.0.0.1:6333/dashboard"
+
+    echo -e "${RED}❌ $1${NC}"
+
+    ((TESTS_FAILED++))YELLOW='\033[1;33m')
+
+}
 
 NC='\033[0m' # No Color
 
-all_healthy=true
+warn() {
+
+    echo -e "${YELLOW}⚠️ $1${NC}"all_healthy=true
+
+}
 
 # Test results
 
-TESTS_PASSED=0for service in "${services[@]}"; do
+# System Resources Check
+
+echo "📊 System Resources:"TESTS_PASSED=0for service in "${services[@]}"; do
+
+echo "===================="
 
 TESTS_FAILED=0    IFS=':' read -r name port url <<< "$service"
 
-    printf "%-20s " "$name"
+# RAM Check
 
-# Helper functions
+RAM_GB=$(free -g | grep Mem | awk '{print $2}')    printf "%-20s " "$name"
 
-pass() {    if curl -sf "$url" > /dev/null 2>&1; then
+if [ "$RAM_GB" -ge 150 ]; then
+
+    pass "RAM: ${RAM_GB}GB (Excellent for large models)"# Helper functions
+
+else
+
+    warn "RAM: ${RAM_GB}GB (May limit concurrent model loading)"pass() {    if curl -sf "$url" > /dev/null 2>&1; then
+
+fi
 
     echo -e "${GREEN}✅ $1${NC}"        echo "✅ Healthy (Port $port)"
 
-    ((TESTS_PASSED++))    else
+# GPU Check
 
-}        echo "❌ Unhealthy (Port $port)"
+if nvidia-smi &> /dev/null; then    ((TESTS_PASSED++))    else
 
-        all_healthy=false
+    GPU_MEM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)
 
-fail() {    fi
+    GPU_MEM_GB=$((GPU_MEM / 1024))}        echo "❌ Unhealthy (Port $port)"
 
-    echo -e "${RED}❌ $1${NC}"done
+    if [ "$GPU_MEM_GB" -ge 20 ]; then
 
-    ((TESTS_FAILED++))
+        pass "GPU Memory: ${GPU_MEM_GB}GB (Perfect for 70B models)"        all_healthy=false
 
-}echo "=========================="
+    else
 
-if $all_healthy; then
+        warn "GPU Memory: ${GPU_MEM_GB}GB (May need CPU fallback)"fail() {    fi
 
-warn() {    echo "🎉 All services are healthy!"
+    fi
 
-    echo -e "${YELLOW}⚠️ $1${NC}"    echo ""
+else    echo -e "${RED}❌ $1${NC}"done
 
-}    echo "🔗 Quick Access Links:"
+    fail "GPU: NVIDIA GPU not detected"
 
-    echo "  • Main API: http://127.0.0.1:5266/swagger"
+fi    ((TESTS_FAILED++))
 
-# System Resources Check    echo "  • RAG API Docs: http://127.0.0.1:7001/docs"
 
-echo "📊 System Resources:"    echo "  • Vision API: http://127.0.0.1:7002/swagger"
 
-echo "===================="    echo "  • Semantic Kernel: http://127.0.0.1:5076/swagger"
+# CPU Check}echo "=========================="
 
-    echo "  • Agent Framework: http://127.0.0.1:8082/swagger"
+CPU_CORES=$(nproc)
 
-# RAM Check    echo "  • Legacy Agents: http://127.0.0.1:8081/swagger"
+if [ "$CPU_CORES" -ge 16 ]; thenif $all_healthy; then
+
+    pass "CPU Cores: $CPU_CORES (Excellent for parallel processing)"
+
+elsewarn() {    echo "🎉 All services are healthy!"
+
+    warn "CPU Cores: $CPU_CORES (Consider upgrading for better performance)"
+
+fi    echo -e "${YELLOW}⚠️ $1${NC}"    echo ""
+
+
+
+echo ""}    echo "🔗 Quick Access Links:"
+
+
+
+# Storage Check    echo "  • Main API: http://127.0.0.1:5266/swagger"
+
+echo "💾 Storage:"
+
+echo "============"# System Resources Check    echo "  • RAG API Docs: http://127.0.0.1:7001/docs"
+
+
+
+# H: drive checkecho "📊 System Resources:"    echo "  • Vision API: http://127.0.0.1:7002/swagger"
+
+if [ -d "/mnt/h/ollama-models" ]; then
+
+    H_DRIVE_SIZE=$(df -h /mnt/h | tail -1 | awk '{print $2}')echo "===================="    echo "  • Semantic Kernel: http://127.0.0.1:5076/swagger"
+
+    H_DRIVE_USED=$(du -sh /mnt/h/ollama-models | cut -f1)
+
+    pass "H: Drive Models: $H_DRIVE_USED / $H_DRIVE_SIZE"    echo "  • Agent Framework: http://127.0.0.1:8082/swagger"
+
+else
+
+    fail "H: Drive not accessible at /mnt/h/ollama-models"# RAM Check    echo "  • Legacy Agents: http://127.0.0.1:8081/swagger"
+
+fi
 
 RAM_GB=$(free -g | grep Mem | awk '{print $2}')    echo "  • Qdrant Dashboard: http://127.0.0.1:6333/dashboard"
 
-if [ "$RAM_GB" -ge 150 ]; then    echo ""
+# Project disk usage
+
+PROJECT_SIZE=$(du -sh . --exclude=.venv --exclude=.git | cut -f1)if [ "$RAM_GB" -ge 150 ]; then    echo ""
+
+pass "Project Size: $PROJECT_SIZE (YAGNI compliance)"
 
     pass "RAM: ${RAM_GB}GB (Excellent for large models)"    echo "🎯 Test Commands:"
 
+echo ""
+
 else    echo "  • RAG Query: curl -X POST 'http://127.0.0.1:7001/ask' -H 'Content-Type: application/json' -d '{\"q\":\"test\"}'"
 
-    warn "RAM: ${RAM_GB}GB (May limit concurrent model loading)"    echo "  • Main API Ask: curl -X POST 'http://127.0.0.1:5266/api/ask' -H 'Content-Type: application/json' -d '{\"question\":\"test\"}'"
+# Services Check
+
+echo "🚀 Services:"    warn "RAM: ${RAM_GB}GB (May limit concurrent model loading)"    echo "  • Main API Ask: curl -X POST 'http://127.0.0.1:5266/api/ask' -H 'Content-Type: application/json' -d '{\"question\":\"test\"}'"
+
+echo "============"
 
 fi    exit 0
 
+# Ollama Check
+
+if pgrep -f ollama > /dev/null; thenelse
+
+    if curl -s http://localhost:11434/api/tags > /dev/null; then
+
+        MODEL_COUNT=$(ollama list | grep -v NAME | wc -l)# GPU Check    echo "⚠️  Some services are unhealthy"
+
+        pass "Ollama: Running with $MODEL_COUNT models"
+
+    elseif nvidia-smi &> /dev/null; then    echo ""
+
+        warn "Ollama: Process running but API not responding"
+
+    fi    GPU_MEM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)    echo "🔧 Troubleshooting tips:"
+
 else
 
-# GPU Check    echo "⚠️  Some services are unhealthy"
+    fail "Ollama: Service not running"    GPU_MEM_GB=$((GPU_MEM / 1024))    echo "  • Check logs: docker logs qdrant"
 
-if nvidia-smi &> /dev/null; then    echo ""
-
-    GPU_MEM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)    echo "🔧 Troubleshooting tips:"
-
-    GPU_MEM_GB=$((GPU_MEM / 1024))    echo "  • Check logs: docker logs qdrant"
+fi
 
     if [ "$GPU_MEM_GB" -ge 20 ]; then    echo "  • Restart services: ./scripts/stop-all.sh && ./scripts/start-all.sh"
 
-        pass "GPU Memory: ${GPU_MEM_GB}GB (Perfect for 70B models)"    echo "  • Check ports: netstat -tlnp | grep -E ':(5266|7001|7002|5076|8082|8081|6333)'"
+# Docker Check
 
-    else    exit 1
+if docker --version > /dev/null 2>&1; then        pass "GPU Memory: ${GPU_MEM_GB}GB (Perfect for 70B models)"    echo "  • Check ports: netstat -tlnp | grep -E ':(5266|7001|7002|5076|8082|8081|6333)'"
 
-        warn "GPU Memory: ${GPU_MEM_GB}GB (May need CPU fallback)"fi
+    if docker compose -f docker/compose.yml ps | grep -q "qdrant.*Up"; then
+
+        pass "Qdrant: Vector database running"    else    exit 1
+
+    else
+
+        fail "Qdrant: Vector database not running"        warn "GPU Memory: ${GPU_MEM_GB}GB (May need CPU fallback)"fi
 
     fi
-else
-    fail "GPU: NVIDIA GPU not detected"
+
+else    fi
+
+    fail "Docker: Not installed or not accessible"else
+
+fi    fail "GPU: NVIDIA GPU not detected"
+
 fi
 
-# CPU Check
-CPU_CORES=$(nproc)
-if [ "$CPU_CORES" -ge 16 ]; then
-    pass "CPU Cores: $CPU_CORES (Excellent for parallel processing)"
-else
-    warn "CPU Cores: $CPU_CORES (Consider upgrading for better performance)"
-fi
+# Python Environment Check
 
-echo ""
+if [ -d ".venv" ]; then# CPU Check
 
-# Storage Check
+    if [ -f ".venv/bin/activate" ]; thenCPU_CORES=$(nproc)
+
+        pass "Python: Virtual environment ready"if [ "$CPU_CORES" -ge 16 ]; then
+
+    else    pass "CPU Cores: $CPU_CORES (Excellent for parallel processing)"
+
+        fail "Python: Virtual environment corrupted"else
+
+    fi    warn "CPU Cores: $CPU_CORES (Consider upgrading for better performance)"
+
+elsefi
+
+    fail "Python: No virtual environment found"
+
+fiecho ""
+
+
+
+echo ""# Storage Check
+
 echo "💾 Storage:"
-echo "============"
 
-# H: drive check
+# Quick Functional Testsecho "============"
+
+echo "🧪 Functional Tests:"
+
+echo "==================="# H: drive check
+
 if [ -d "/mnt/h/ollama-models" ]; then
-    H_DRIVE_SIZE=$(df -h /mnt/h | tail -1 | awk '{print $2}')
-    H_DRIVE_USED=$(du -sh /mnt/h/ollama-models | cut -f1)
-    pass "H: Drive Models: $H_DRIVE_USED / $H_DRIVE_SIZE"
+
+# Ollama API test    H_DRIVE_SIZE=$(df -h /mnt/h | tail -1 | awk '{print $2}')
+
+if curl -s http://localhost:11434/api/tags > /dev/null; then    H_DRIVE_USED=$(du -sh /mnt/h/ollama-models | cut -f1)
+
+    pass "Ollama API: Responding"    pass "H: Drive Models: $H_DRIVE_USED / $H_DRIVE_SIZE"
+
+elseelse
+
+    fail "Ollama API: Not responding"    fail "H: Drive not accessible at /mnt/h/ollama-models"
+
+fifi
+
+
+
+# Qdrant API test  # Project disk usage
+
+if curl -s http://localhost:6333/health > /dev/null; thenPROJECT_SIZE=$(du -sh . --exclude=.venv --exclude=.git | cut -f1)
+
+    pass "Qdrant API: Responding"pass "Project Size: $PROJECT_SIZE (YAGNI compliance)"
+
 else
-    fail "H: Drive not accessible at /mnt/h/ollama-models"
+
+    fail "Qdrant API: Not responding"echo ""
+
 fi
-
-# Project disk usage
-PROJECT_SIZE=$(du -sh . --exclude=.venv --exclude=.git | cut -f1)
-pass "Project Size: $PROJECT_SIZE (YAGNI compliance)"
-
-echo ""
 
 # Services Check
-echo "🚀 Services:"
+
+echo ""echo "🚀 Services:"
+
 echo "============"
 
-# Ollama Check
-if pgrep -f ollama > /dev/null; then
-    if curl -s http://localhost:11434/api/tags > /dev/null; then
-        MODEL_COUNT=$(ollama list | grep -v NAME | wc -l)
-        pass "Ollama: Running with $MODEL_COUNT models"
-    else
-        warn "Ollama: Process running but API not responding"
-    fi
-else
-    fail "Ollama: Service not running"
-fi
+# Summary
 
-# Docker Check
-if docker --version > /dev/null 2>&1; then
+echo "📋 Health Check Summary:"# Ollama Check
+
+echo "========================"if pgrep -f ollama > /dev/null; then
+
+echo -e "${GREEN}Passed: $TESTS_PASSED${NC}"    if curl -s http://localhost:11434/api/tags > /dev/null; then
+
+echo -e "${RED}Failed: $TESTS_FAILED${NC}"        MODEL_COUNT=$(ollama list | grep -v NAME | wc -l)
+
+        pass "Ollama: Running with $MODEL_COUNT models"
+
+if [ "$TESTS_FAILED" -eq 0 ]; then    else
+
+    echo ""        warn "Ollama: Process running but API not responding"
+
+    echo -e "${GREEN}🎉 System is healthy and ready for DocuMind development!${NC}"    fi
+
+    exit 0else
+
+else    fail "Ollama: Service not running"
+
+    echo ""fi
+
+    echo -e "${YELLOW}⚠️ Some issues detected. Review failed tests above.${NC}"
+
+    exit 1# Docker Check
+
+fiif docker --version > /dev/null 2>&1; then
     if docker compose -f docker/compose.yml ps | grep -q "qdrant.*Up"; then
         pass "Qdrant: Vector database running"
     else
