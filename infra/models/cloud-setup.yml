@@ -1,0 +1,44 @@
+# ☁️ Cloud Model Configuration
+# Azure AI + GitHub Models Integration
+
+azure_ai:
+  # Azure AI Foundry Models
+  endpoint: "https://YOUR-REGION.ai.azure.com"
+  subscription_id: "YOUR-SUBSCRIPTION-ID"
+  resource_group: "documind-rg"
+  
+  models:
+    - name: "gpt-4o"
+      type: "chat_completion"
+      tier: "standard"
+      deployment: "gpt-4o-deployment"
+    
+    - name: "text-embedding-3-large"  
+      type: "embedding"
+      tier: "standard"
+      deployment: "embedding-deployment"
+
+github_models:
+  # GitHub Models (Free Tier)
+  endpoint: "https://models.inference.ai.azure.com"
+  
+  models:
+    - name: "gpt-4o-mini"
+      type: "chat_completion"
+      rate_limit: "15 requests/minute"
+      
+    - name: "phi-3.5-mini-instruct"
+      type: "chat_completion" 
+      rate_limit: "15 requests/minute"
+
+# Hybrid Strategy
+deployment_strategy:
+  local_first: true              # Try local Ollama first
+  cloud_fallback: "github"      # Fallback to GitHub models
+  azure_premium: false          # Use Azure for production only
+  
+  routing:
+    reasoning_tasks: "llama3.1:70b"    # Local heavy reasoning
+    quick_responses: "llama3.1:8b"     # Local fast responses  
+    embeddings: "azure"                # Cloud embeddings
+    fallback: "gpt-4o-mini"            # GitHub fallback

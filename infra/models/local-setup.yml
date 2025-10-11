@@ -1,0 +1,34 @@
+# 🚀 Local Ollama Configuration
+# Optimized for High-End Hardware: 192GB RAM, 24GB VRAM, 22 cores
+
+# Model Storage
+ollama:
+  models_path: "/mnt/h/ollama-models"
+  host: "http://127.0.0.1:11434"
+  
+  # Performance Optimization
+  max_loaded_models: 3          # Load 3 models simultaneously
+  num_parallel: 4               # 4 parallel requests
+  max_queue: 100                # High request queue
+  
+  # GPU Configuration  
+  gpu:
+    cuda_visible_devices: 0     # Primary GPU
+    gpu_overhead_mb: 2048       # 2GB GPU overhead
+  
+  # Memory Management (192GB RAM available)
+  memory:
+    host_limit_gb: 150          # 150GB max for models
+    swap_size_gb: 32            # 32GB swap
+
+# Current Models (49GB total)
+models:
+  - name: "llama3.1:70b"
+    size_gb: 42
+    purpose: "Main reasoning"
+  - name: "llama3.1:8b"  
+    size_gb: 4.9
+    purpose: "Fast responses"
+  - name: "phi3.5"
+    size_gb: 2.2
+    purpose: "Lightweight tasks"
