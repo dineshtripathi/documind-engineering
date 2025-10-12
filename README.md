@@ -25,8 +25,8 @@
 - **Backend**: FastAPI (Python) - High-performance async API
 - **AI Framework**: PyTorch + Transformers + PEFT (LoRA fine-tuning)
 - **Cloud Services**: Azure OpenAI + Azure AI Search
-- **Infrastructure**: Azure Bicep (Infrastructure as Code)
-- **Containerization**: Docker with multi-stage builds
+- **Infrastructure**: Manual Azure resource provisioning
+- **Containerization**: Docker for flexible deployment
 
 ### AI/ML Stack
 - **Local Training**: PEFT (Parameter-Efficient Fine-Tuning)
